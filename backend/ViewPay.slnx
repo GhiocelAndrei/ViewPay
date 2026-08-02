@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ViewPay.Abstractions/ViewPay.Abstractions.csproj" />
+    <Project Path="src/ViewPay.Api/ViewPay.Api.csproj" />
+    <Project Path="src/ViewPay.Application/ViewPay.Application.csproj" />
+    <Project Path="src/ViewPay.DataAccess/ViewPay.DataAccess.csproj" />
+  </Folder>
+</Solution>

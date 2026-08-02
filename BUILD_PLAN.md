@@ -74,14 +74,18 @@ Pure UI SPA. **React + Vite + TypeScript.**
 
 ### D3 — Backend stack (.NET brain/gateway) ✅
 - Runtime **.NET 8 (LTS)** · ASP.NET Core · **Controllers (MVC)** · OpenAPI/Swagger
-- **Clean/Layered Architecture:**
+- **Layered architecture (team convention): `Api → Application → DataAccess → Abstractions`**
   ```
-  backend/
-    ViewPay.Domain/          entities, value objects, domain rules (money in bani)
-    ViewPay.Application/      use cases, interfaces (IAiModelClient, ITikTokClient), DTOs
-    ViewPay.Infrastructure/   EF Core, TikTok module, ai-service HTTP client, Postgres
-    ViewPay.Api/             Controllers = the API gateway; auth; Swagger
+  backend/src/
+    ViewPay.Api/            Controllers = the API gateway; Program.cs; auth; Swagger
+    ViewPay.Application/    Interfaces, Services (AI + TikTok HttpClients), Mapping (AutoMapper),
+                           Validations (FluentValidation), ApplicationExtensions.AddApplication(conn)
+    ViewPay.DataAccess/     EF Core DbContext, Migrations, DataAccessExtensions.AddDataAccess(conn)
+    ViewPay.Abstractions/   Models (entities), DTOs, Settings, Constants, Common — the shared leaf
   ```
+  Abstractions is referenced by all; external-service clients (AI, TikTok) live in
+  Application/Services (pooled HttpClient), so there is no separate Infrastructure project.
+  Note: scaffolded on **.NET 10** (installed LTS) rather than net8.0.
 - Data access: **EF Core** (migrations, schema-per-service) **+ Dapper later** for money-ledger hot paths
 - Validation: FluentValidation · Background: Hosted `BackgroundService` (+ Hangfire if needed)
 - Money: integer-only in **bani** (`long`), never floats (dev-doc non-negotiable)

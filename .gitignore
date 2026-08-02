@@ -1,0 +1,45 @@
+# ---- .NET ----
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+
+# ---- Node / frontend ----
+node_modules/
+dist/
+.vite/
+*.local
+.vercel/
+
+# ---- Python / ai-service ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# ---- env & secrets (never commit) ----
+.env
+.env.*
+!.env.example
+*.pem
+serviceAccount*.json
+firebase-admin*.json
+
+# ---- data / local infra ----
+pgdata/
+*.log
+
+# ---- IDE / OS ----
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

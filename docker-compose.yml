@@ -1,0 +1,34 @@
+# Local dev: Postgres + the two backend services. Frontend runs via `npm run dev` (Vercel in prod).
+# Firebase Auth/Storage use the Google emulators locally — TODO: add firebase-tools emulator.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-viewpay}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-viewpay_local_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-viewpay}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ai-service:
+    build: ./ai-service
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "8000:8000"
+
+  backend:
+    build: ./backend
+    depends_on:
+      - postgres
+      - ai-service
+    environment:
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-viewpay};Username=${POSTGRES_USER:-viewpay};Password=${POSTGRES_PASSWORD:-viewpay_local_dev}
+      AI_SERVICE_URL: http://ai-service:8000
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
