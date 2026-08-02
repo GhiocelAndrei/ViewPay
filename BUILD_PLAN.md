@@ -1,4 +1,4 @@
-# ViewPay — Build Plan (Demo, 4 weeks)
+# Vira — Build Plan (Demo, 4 weeks)
 
 **Scope:** Demo-as-foundation. Build the 4-week demo so every stack choice extends
 directly into the full 13-week / €80k program (day 60 = money flows, day 90 = pilot).
@@ -77,11 +77,11 @@ Pure UI SPA. **React + Vite + TypeScript.**
 - **Layered architecture (team convention): `Api → Application → DataAccess → Abstractions`**
   ```
   backend/src/
-    ViewPay.Api/            Controllers = the API gateway; Program.cs; auth; Swagger
-    ViewPay.Application/    Interfaces, Services (AI + TikTok HttpClients), Mapping (AutoMapper),
+    Vira.Api/            Controllers = the API gateway; Program.cs; auth; Swagger
+    Vira.Application/    Interfaces, Services (AI + TikTok HttpClients), Mapping (AutoMapper),
                            Validations (FluentValidation), ApplicationExtensions.AddApplication(conn)
-    ViewPay.DataAccess/     EF Core DbContext, Migrations, DataAccessExtensions.AddDataAccess(conn)
-    ViewPay.Abstractions/   Models (entities), DTOs, Settings, Constants, Common — the shared leaf
+    Vira.DataAccess/     EF Core DbContext, Migrations, DataAccessExtensions.AddDataAccess(conn)
+    Vira.Abstractions/   Models (entities), DTOs, Settings, Constants, Common — the shared leaf
   ```
   Abstractions is referenced by all; external-service clients (AI, TikTok) live in
   Application/Services (pooled HttpClient), so there is no separate Infrastructure project.
@@ -207,7 +207,7 @@ Build the **full Bloc 1 calculation/ledger logic now** (all simulated), not just
 
 **⚠ Cross-origin auth callout (interacts with D5):** Vercel frontend and Azure backend are
 different origins. To keep the **HttpOnly cookie session** first-party and simple (SameSite=Lax),
-put both under **one registrable domain** — e.g. `app.viewpay.com` (Vercel) + `api.viewpay.com`
-(Azure), cookie `Domain=.viewpay.com`. If we ship on default `*.vercel.app` + `*.azurecontainerapps.io`
+put both under **one registrable domain** — e.g. `app.vira.com` (Vercel) + `api.vira.com`
+(Azure), cookie `Domain=.vira.com`. If we ship on default `*.vercel.app` + `*.azurecontainerapps.io`
 domains instead, cookies must be **SameSite=None; Secure** with credentialed CORS pinned to the exact
 frontend origin. **Recommend the custom-domain path** to preserve the D5 security model.

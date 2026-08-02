@@ -1,0 +1,37 @@
+using Vira.Abstractions.Common;
+
+namespace Vira.Abstractions.Models.Creators;
+
+public class Creator : Entity
+{
+    public Guid AccountId { get; set; }
+    public string DisplayName { get; set; } = string.Empty;
+    public long FollowerCount { get; set; }   // from user.info.stats — drives the campaign gate
+    public string? Niche { get; set; }
+}
+
+/// <summary>TikTok OAuth tokens (encrypted at rest). Refreshed by a background service before 24h expiry.</summary>
+public class TikTokConnection : Entity
+{
+    public Guid CreatorId { get; set; }
+    public string OpenId { get; set; } = string.Empty;
+    public string AccessTokenEncrypted { get; set; } = string.Empty;
+    public string RefreshTokenEncrypted { get; set; } = string.Empty;
+    public DateTimeOffset ExpiresAt { get; set; }
+    public string Scopes { get; set; } = string.Empty;
+}
+
+/// <summary>A clip cached from the Display API <c>video.list</c> (fetch-live-on-login + cache, D4).</summary>
+public class CreatorClip : Entity
+{
+    public Guid CreatorId { get; set; }
+    public string TikTokVideoId { get; set; } = string.Empty;
+    public string? Title { get; set; }
+    public string? CoverImageUrl { get; set; }   // fed to Opus vision for the portrait
+    public string? EmbedLink { get; set; }       // how we render it (we don't host it)
+    public long ViewCount { get; set; }
+    public long LikeCount { get; set; }
+    public long CommentCount { get; set; }
+    public long ShareCount { get; set; }
+    public DateTimeOffset TikTokCreateTime { get; set; }
+}

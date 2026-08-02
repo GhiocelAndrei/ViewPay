@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:16
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-viewpay}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-viewpay_local_dev}
-      POSTGRES_DB: ${POSTGRES_DB:-viewpay}
+      POSTGRES_USER: ${POSTGRES_USER:-vira}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vira_local_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-vira}
     ports:
       - "5432:5432"
     volumes:
@@ -25,7 +25,7 @@ services:
       - postgres
       - ai-service
     environment:
-      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-viewpay};Username=${POSTGRES_USER:-viewpay};Password=${POSTGRES_PASSWORD:-viewpay_local_dev}
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-vira};Username=${POSTGRES_USER:-vira};Password=${POSTGRES_PASSWORD:-vira_local_dev}
       AI_SERVICE_URL: http://ai-service:8000
     ports:
       - "8080:8080"

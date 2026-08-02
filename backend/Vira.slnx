@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Vira.Abstractions/Vira.Abstractions.csproj" />
+    <Project Path="src/Vira.Api/Vira.Api.csproj" />
+    <Project Path="src/Vira.Application/Vira.Application.csproj" />
+    <Project Path="src/Vira.DataAccess/Vira.DataAccess.csproj" />
+  </Folder>
+</Solution>

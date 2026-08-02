@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
-      - run: dotnet build backend/ViewPay.slnx -c Release
+      - run: dotnet build backend/Vira.slnx -c Release
 
   ai-service:
     runs-on: ubuntu-latest
