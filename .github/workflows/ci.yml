@@ -31,5 +31,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm --prefix frontend install
-      - run: npm --prefix frontend run build
+      # npm workspace: install from the root, never from apps/*. Installing
+      # inside an app nests react-native or tailwindcss and silently breaks
+      # NativeWind's type augmentation (see CLAUDE.md).
+      - run: npm ci --legacy-peer-deps
+      - run: npm run typecheck
+      - run: npm run build:web

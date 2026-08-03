@@ -43,3 +43,13 @@ pgdata/
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
+
+# ---- Expo ----
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+ios/
+android/

@@ -7,5 +7,5 @@ class AiModelClient(Protocol):
 
 
 class ClaudeClient:
-    """Anthropic implementation. TODO: implement with the anthropic SDK (claude-opus-4-8)."""
+    """Anthropic implementation. TODO: implement with the anthropic SDK (claude-opus-5)."""
     ...
