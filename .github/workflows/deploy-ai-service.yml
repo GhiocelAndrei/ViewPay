@@ -1,0 +1,51 @@
+name: Deploy ai-service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ai-service/**"
+      - ".github/workflows/deploy-ai-service.yml"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  APP: vira-ai-service
+  IMAGE_REPO: ai-service
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Resolve ACR
+        run: |
+          ACR=$(az acr list -g "${{ vars.AZURE_RESOURCE_GROUP }}" --query "[0].name" -o tsv)
+          echo "ACR=$ACR" >> "$GITHUB_ENV"
+          echo "ACR_LOGIN=$(az acr show -n "$ACR" --query loginServer -o tsv)" >> "$GITHUB_ENV"
+
+      - name: Build + push image (ACR Tasks — no local Docker)
+        run: az acr build --registry "$ACR" --image "$IMAGE_REPO:${{ github.sha }}" --file ai-service/Dockerfile ai-service
+
+      - name: Update Container App
+        run: az containerapp update -n "$APP" -g "${{ vars.AZURE_RESOURCE_GROUP }}" --image "$ACR_LOGIN/$IMAGE_REPO:${{ github.sha }}"
+
+      - name: Verify revision provisioned
+        run: |
+          # ai-service has INTERNAL ingress (not reachable from GitHub), so we verify
+          # the new revision provisioned instead of curling it. The backend reaches it
+          # internally at Ai__BaseUrl.
+          status=$(az containerapp show -n "$APP" -g "${{ vars.AZURE_RESOURCE_GROUP }}" --query "properties.runningStatus" -o tsv)
+          echo "runningStatus=$status"
+          if [ "$status" = "Failed" ]; then echo "revision failed ❌"; exit 1; fi
+          echo "provisioned ✅"
