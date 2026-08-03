@@ -24,91 +24,178 @@ export const ro = {
   },
   landing: {
     navCreator: "Sunt creator",
-    navBrand: "Am o afacere",
-    signIn: "Intră în cont",
-    heroBadge: "Pentru afaceri mici și creatori mici",
-    heroTitle: "Reclama pe TikTok nu mai e doar pentru cei mari",
+    hasAccount: "Ai deja cont?",
+    signIn: "Loghează-te",
+
+    heroTitle: "Reclama se plătește doar dacă se vede",
     heroSubtitle:
-      "Shaormeria din colț își face prima campanie cu 300 €. Creatorul cu 2.000 de urmăritori e plătit pentru fiecare vizualizare. Vira îi pune la aceeași masă — și plătește doar rezultatul măsurat.",
-    heroCtaCreator: "Sunt creator",
-    heroCtaBrand: "Am o afacere",
+      "Îți trebuie un cont de TikTok și creativitate. Atât. Ești plătit pentru fiecare vizualizare pe care o aduci, la aceeași rată ca oricine altcineva — iar afacerea care te plătește vede exact ce a cumpărat.",
+    heroCtaCreator: "Vreau să fiu plătit pe vizualizări",
+    heroCtaBrand: "Vreau reclamă pentru afacerea mea",
     heroNote: "Fără abonament, fără contract anual, fără agenție la mijloc.",
     proof: {
-      minBudget: "buget minim de campanie",
-      minFollowers: "urmăritori — atât îți trebuie",
-      creatorFee: "cost pentru creatori, oricând",
+      noFollowers: "urmăritori necesari ca să începi",
+      creatorFee: "costuri sau comisioane pentru creatori",
+      noContract: "contracte, abonamente sau exclusivitate",
     },
+
+    moneyTitle: "Unde se duc banii, de fapt",
+    moneySubtitle:
+      "Același buget, două trasee. Diferența nu e de stil — e cât ajunge în vizualizări și cât se oprește pe drum.",
+    agencyLabel: "Modelul de până acum",
+    agencyPoints: [
+      "Agenția poate opri până la jumătate din buget ca onorariu",
+      "Plătești tariful influencerului înainte să știi dacă merge",
+      "Alegi omul după numărul de urmăritori — adică după preț, nu după rezultat",
+      "Raportul vine la final, în capturi de ecran",
+      "Dacă postarea nu prinde, banii rămân cheltuiți",
+    ],
+    viraLabel: "Modelul Vira",
+    viraPoints: [
+      "Plătești vizualizări, nu onorariul cuiva",
+      "Plătești după ce vizualizarea a fost măsurată, nu înainte",
+      "Alegi după ce a mers deja, nu după cât de cunoscut e omul",
+      "Vezi vizualizările crescând în timp real, direct de pe TikTok",
+      "Ce nu s-a consumat se întoarce la tine",
+    ],
+    moneyNote:
+      "Vizualizările sunt luate direct de pe TikTok și validate înainte de plată. Nu din capturi de ecran și nu din ce declară cineva.",
+
     forWhoTitle: "Pentru cine am construit Vira",
     forWhoSubtitle:
-      "Nu pentru brandurile care au deja agenție și nici pentru influencerii care au deja contracte. Pentru ceilalți.",
+      "Pentru oricine are o idee bună și un cont de TikTok, și pentru orice afacere care vrea să știe exact ce a cumpărat. De la creatorul aflat la primul lui clip până la brandul care are deja campanii peste tot — aceleași reguli pentru toți.",
     audiences: [
       {
         icon: "storefront",
-        eyebrow: "Ai o afacere mică",
-        title: "Nu-ți trebuie agenție și nici buget de corporație",
+        eyebrow: "Plătești reclamă pe încredere",
+        title: "Nu mai da banii înainte să știi dacă se vede",
         points: [
-          "Pornești de la 300 € — cât costă o zi de fluturași",
-          "Nu scrii brief-uri. Răspunzi la o întrebare: ce vrei să se întâmple?",
-          "Filmează oameni reali din orașul tău, nu un actor dintr-un studio",
-          "Plătești doar vizualizările verificate. Restul se întoarce.",
+          "Plătești vizualizarea verificată, nu estimarea nimănui",
+          "Nu se consumă tot bugetul? Restul se întoarce în cont.",
+          "Scrii un brief dacă vrei, sau răspunzi doar la o întrebare: ce vrei să se întâmple?",
+          "Vezi cifrele în timp real, nu într-un raport la final",
         ],
       },
       {
         icon: "person",
-        eyebrow: "Ai câteva mii de urmăritori",
-        title: "Nu trebuie să fii influencer ca să fii plătit",
+        eyebrow: "Te pricepi, dar nu ești cunoscut",
+        title: "Nu-ți trebuie urmăritori. Îți trebuie creativitate.",
         points: [
-          "De la 1.000 de urmăritori. Contează cât de mult te urmăresc, nu câți sunt.",
-          "Aceeași rată pe mia de vizualizări ca oricine altcineva de pe platformă",
-          "Fără negocieri pe DM și fără „îți dăm produsul gratis”",
-          "Vezi din start cât ai câștiga la audiența ta",
+          "Un cont de TikTok și o idee bună. Poți începe azi.",
+          "Aceeași rată pe mia de vizualizări ca oricine altcineva. Fără negociere.",
+          "Dacă primul tău clip bubuie, ești plătit ca atare — indiferent câți urmăritori ai.",
+          "Fără DM-uri și fără „îți dăm produsul gratis”",
         ],
       },
     ],
+
     howTitle: "Cum funcționează, pentru creatori",
-    howSubtitle: "Trei pași. Fără negocieri pe Discord și fără plăți pe încredere.",
+    howSubtitle: "Trei pași, de la contul tău la primul câștig.",
     steps: [
       {
         icon: "link",
         title: "Îți conectezi contul de TikTok",
-        text: "O autorizare standard. Vira citește doar clipurile și cifrele tale publice — nimic altceva.",
+        text: "O autorizare standard. Atât se cere — niciun prag de urmăritori. Vira vede doar clipurile și cifrele tale publice.",
       },
       {
         icon: "campaign",
-        title: "Alegi o campanie",
-        text: "Vezi ce vrea afacerea, rata pe mia de vizualizări și cât ai câștiga la audiența ta. Aplici doar unde vrei.",
+        title: "Afli ce ți se potrivește",
+        text: "Un chestionar scurt îți construiește profilul de creator. Vira îți propune campaniile potrivite pentru stilul tău și îți arată cât de bine se potrivește fiecare, ca să nu pierzi timp pe ce nu ți se pliază.",
       },
       {
-        icon: "payments",
-        title: "Postezi și încasezi",
-        text: "Postezi normal, de pe contul tău. Vira măsoară vizualizările validate și plătește în tranșe.",
+        icon: "task_alt",
+        title: "Urci clipul, primești aprobarea, postezi",
+        text: "Clipul urcă întâi pe Vira, ca afacerea să-l vadă și să-l aprobe. Abia apoi îl postezi de pe contul tău, iar vizualizările validate se plătesc în tranșe.",
       },
     ],
-    brandsTitle: "Prima ta reclamă, chiar dacă n-ai mai făcut niciodată una",
-    brandsText:
-      "Nu-ți trebuie fotograf, agenție sau buget de mii de euro. Spui ce vrei să se întâmple, pui un buget, iar oameni reali din orașul tău filmează. Plătești doar vizualizările verificate prin API-ul oficial TikTok.",
-    brandsPoints: [
-      "Buget de la 300 € — și îl oprești când vrei",
-      "Vizualizări citite din API-ul oficial, nu din capturi de ecran",
-      "Bugetul neconsumat se întoarce automat în cont",
-    ],
-    brandsCardLabel: "Exemplu: campanie de cartier",
+
     campaignsTitle: "Cine își face reclamă acum pe Vira",
     campaignsSubtitle:
       "O sală de cartier, o shaormerie, o frizerie. Exact genul de afaceri care până acum n-aveau unde.",
     seeAll: "Vezi toate campaniile",
-    footerNote: "Vira — reclamă pe TikTok pentru afaceri mici.",
+    campaignCardPayment: "Plată pe vizualizare validată",
+
+    brandsTitle: "Prima ta reclamă, chiar dacă n-ai mai făcut niciodată una",
+    brandsText:
+      "Nu-ți trebuie fotograf, agenție sau echipă de marketing. Spui ce vrei să se întâmple, pui un buget, iar creatori reali filmează pentru tine.",
+    brandsPoints: [
+      "Pornești și oprești campania când vrei, fără contract anual",
+      "Aprobi fiecare clip înainte să ajungă pe TikTok",
+      "Alegi tu creatorii sau lași Vira să-ți propună potriviri",
+    ],
+    brandsCardLabel: "Exemplu: campanie de cartier",
+    brandsCardActive: "Activă",
+    brandsCardCreators: (n: number) => `Prima campanie, ${n} creatori`,
+    brandsCardViews: "vizualizări măsurate",
+    brandsCardBudgetUsed: (percent: number) => `${percent}% din buget consumat`,
+    brandsCardRefund: "Restul se restituie automat, la închiderea campaniei",
+
+    startHere: "Începe aici",
+    footerNote: "Vira — plătești reclama doar dacă se vede.",
+    footerLinks: {
+      terms: "Termeni",
+      privacy: "Confidențialitate",
+      contact: "Contact",
+    },
   },
   signIn: {
     title: "Intră în Vira",
     subtitle: "Alege cum vrei să continui.",
-    creatorTitle: "Continuă cu TikTok",
-    creatorText: "Pentru creatori. Îți conectezi contul și vezi campaniile potrivite.",
-    brandTitle: "Cont de business",
-    brandText: "Pentru branduri. Creezi campanii și urmărești rezultatele.",
+    creatorTitle: "Sunt creator",
+    creatorText: "Intri cu contul tău de TikTok. Nu-ți trebuie cont separat pe Vira.",
+    brandTitle: "Am o afacere",
+    brandText: "Intri cu emailul și parola contului de business. N-ai cont? Îl faci în pasul următor.",
     paidOut: "plătiți către creatori",
     legal: "Prin continuare accepți Termenii și Politica de confidențialitate.",
     backToSite: "Înapoi la site",
+    backToChooser: "Înapoi",
+  },
+
+  creatorAuth: {
+    title: "Intră cu contul tău de TikTok",
+    subtitle:
+      "Nu-ți faci cont pe Vira. Contul tău de TikTok e contul tău aici — de acolo citim clipurile și vizualizările pe care ești plătit.",
+    button: "Continuă cu TikTok",
+    readsTitle: "Ce vede Vira",
+    reads: [
+      "Numele de utilizator și poza de profil",
+      "Clipurile tale publice și cifrele lor",
+      "Numărul de urmăritori — doar informativ, nu decide nimic",
+    ],
+    readsNot: "Vira nu poate posta în locul tău și nu-ți vede mesajele.",
+    noSeparateAccount: "Fără parolă nouă, fără formular, fără email de confirmare.",
+    legal: "Prin continuare accepți Termenii și Politica de confidențialitate.",
+  },
+
+  brandAuth: {
+    registerTitle: "Creează cont de business",
+    registerSubtitle:
+      "Contul de business e separat de TikTok: afacerea ta nu postează, creatorii o fac pentru ea.",
+    loginTitle: "Intră în contul de business",
+    loginSubtitle: "Bine ai revenit. Continuă de unde ai rămas.",
+
+    businessName: "Numele afacerii",
+    businessNamePlaceholder: "Ex.: Shaorma la Vlad",
+    contactName: "Numele tău",
+    contactNamePlaceholder: "Ex.: Vlad Ionescu",
+    email: "Email",
+    emailPlaceholder: "nume@afacerea-ta.ro",
+    password: "Parolă",
+    passwordPlaceholder: "Minimum 8 caractere",
+
+    submitRegister: "Creează contul",
+    submitLogin: "Intră în cont",
+    toLogin: "Ai deja cont de business?",
+    toLoginAction: "Intră",
+    toRegister: "N-ai încă un cont?",
+    toRegisterAction: "Creează unul",
+
+    errors: {
+      required: "Completează câmpul.",
+      email: "Scrie o adresă de email validă.",
+      password: "Parola trebuie să aibă cel puțin 8 caractere.",
+    },
+    legal: "Prin crearea contului accepți Termenii și Politica de confidențialitate.",
   },
   feed: {
     earned: "generați",
@@ -118,6 +205,36 @@ export const ro = {
     nextVideo: "Următorul video",
     yourEarnings: "Câștigurile tale",
     firstCampaignCta: "Aplică la prima campanie",
+
+    tabAll: "Campanii",
+    tabForYou: "Pentru tine",
+
+    youWouldEarn: "Ai lua estimat",
+    atYourAudience: "la audiența ta",
+    perMille: "la 1.000 de vizualizări validate",
+    budgetLeft: "Buget rămas",
+    budgetLive: "se consumă acum",
+    slotsLeft: (n: number) => (n === 1 ? "1 loc rămas" : `${n} locuri rămase`),
+    apply: "Aplică la campanie",
+    match: "potrivire",
+
+    save: "Salvează",
+    saved: "Salvat",
+    howToFilm: "Cum filmez",
+    whyMatch: "De ce mi-o arăți",
+    notInterested: "Nu-mi arăta",
+
+    whyMatchTitle: "De ce ți-o arătăm",
+    whyMatchNote: "Fiecare motiv se sprijină pe ce ai postat deja, nu pe presupuneri.",
+    close: "Închide",
+
+    dismissed: (brand: string) => `Nu-ți mai arătăm campanii ca „${brand}”.`,
+    dismissedNote: "Am reținut și pentru potrivirile viitoare.",
+    undo: "Anulează",
+
+    emptyTitle: "Le-ai văzut pe toate",
+    emptyText: "Revino mai târziu — campaniile noi apar aici pe măsură ce afacerile le deschid.",
+    resetDismissed: "Arată-le din nou pe cele ascunse",
   },
   campaigns: {
     title: "Marketplace de campanii",
@@ -180,6 +297,9 @@ export const ro = {
   assistant: {
     title: "Asistent de conținut",
     subtitle: "Cunoaște stilul tău și brief-ul campaniei.",
+    campaignContext: (brand: string) => `Despre campania ${brand}`,
+    campaignQuestion: (hook: string) => `Cum aș filma un clip pentru „${hook}”?`,
+    clearContext: "Renunță la context",
     placeholder: "Întreabă orice despre o campanie sau despre un clip…",
     send: "Trimite",
     basedOn: (date: string) => `pe baza clipului tău din ${date}`,
@@ -213,6 +333,196 @@ export const ro = {
       earned: "Încasat",
     },
     status: { active: "Activă", draft: "Ciornă", closed: "Închisă" },
+  },
+  newCampaign: {
+    title: "Campanie nouă",
+    subtitle: "Patru pași. Fără brief și fără agenție la mijloc.",
+    stepLabel: (current: number, total: number) => `Pasul ${current} din ${total}`,
+    steps: {
+      objective: "Obiectiv",
+      budget: "Buget",
+      requirements: "Cerințe",
+      review: "Sumar",
+    },
+    back: "Înapoi",
+    next: "Continuă",
+    cancel: "Renunță",
+
+    objectiveTitle: "Ce vrei să se întâmple?",
+    objectiveSubtitle: "Alege un singur lucru. Rata și cerințele pornesc de la el.",
+    objectives: {
+      awareness: {
+        title: "Să afle lumea de mine",
+        text: "Vrei să te știe cartierul sau orașul. Cel mai ieftin pe vizualizare.",
+      },
+      visits: {
+        title: "Să vină lume la mine",
+        text: "Ai un local sau un cabinet și vrei oameni pe ușă, nu doar like-uri.",
+      },
+      offer: {
+        title: "Să promovez o ofertă",
+        text: "Ai o reducere sau o promoție cu termen și vrei să se ducă vestea repede.",
+      },
+      launch: {
+        title: "Să lansez ceva nou",
+        text: "Produs, serviciu sau meniu nou. Cere ca produsul să apară în clip.",
+      },
+      community: {
+        title: "Să-mi cresc contul",
+        text: "Vrei urmăritori pe contul tău, nu doar vizualizări pe clipul altcuiva.",
+      },
+    },
+    ratePerMille: "Rata plătită creatorilor",
+
+    budgetTitle: "Cât vrei să investești?",
+    budgetSubtitle: "Plătești doar vizualizările verificate. Ce nu se consumă se întoarce.",
+    budgetLabel: "Buget campanie",
+    budgetFloor: (amount: string) => `Minimum ${amount} pe campanie.`,
+    estimateTitle: "Ce cumperi cu bugetul ăsta",
+    estimatedViews: "Vizualizări verificate",
+    estimatedCreators: "Creatori",
+    estimated: "estimat",
+    estimateNote:
+      "Estimare pe baza ratei campaniei și a mediei platformei. Plata se face pe vizualizările măsurate prin API-ul oficial TikTok, nu pe estimarea asta.",
+    refundNote: "Bugetul neconsumat se restituie automat la închiderea campaniei.",
+
+    requirementsTitle: "Ce trebuie să conțină clipul",
+    requirementsSubtitle:
+      "Cu cât ceri mai puțin, cu atât filmează mai natural — și cu atât aplică mai mulți.",
+    nameLabel: "Numele campaniei",
+    namePlaceholder: "Ex.: Ofertă de toamnă",
+    nameRequired: "Dă-i un nume campaniei ca să poți continua.",
+    hashtagsLabel: "Hashtag-uri obligatorii",
+    hashtagPlaceholder: "Scrie un hashtag și apasă Enter",
+    add: "Adaugă",
+    remove: (value: string) => `Elimină ${value}`,
+    mentionLabel: "Cont menționat",
+    mentionPlaceholder: "@numeleafacerii",
+    durationLabel: "Durata clipului",
+    extraRequirements: "Cerințe din obiectiv",
+    productPlacementLabel: "Produsul trebuie cumpărat și arătat de creator",
+    productPlacementNote:
+      "Restrânge mult numărul de aplicanți — creatorul plătește produsul din buzunar. Cere-o doar dacă e esențială.",
+
+    reviewTitle: "Verifică și creează",
+    reviewSubtitle: "Campania pleacă drept ciornă. O pornești când ești gata.",
+    reviewRequirements: "Cerințe",
+    reviewNoRequirements: "Fără cerințe suplimentare",
+    productPlacementChip: "produsul cumpărat de creator",
+    create: "Creează campania",
+    created: (name: string) => `„${name}” a fost creată ca ciornă.`,
+  },
+  valueProof: {
+    title: "Plătești rezultatul, nu promisiunea",
+    subtitle:
+      "Aceleași cifre de mai sus, citite altfel: ce te-ar fi costat modelul vechi și ce ai plătit de fapt.",
+
+    beforeTitle: "Cum se plătea până acum",
+    before: [
+      "Tarif fix, negociat pe DM, plătit înainte să știi dacă merge",
+      "Alegi omul după numărul de urmăritori și speri că se traduce în vizionări",
+      "Agenția își oprește partea din bugetul tău, indiferent de rezultat",
+      "Raportul vine în capturi de ecran, la final",
+    ],
+
+    afterTitle: "Cum plătești aici",
+    after: [
+      "Plătești vizualizarea verificată. Dacă nu se vede, nu se plătește.",
+      "Alegi după ce a mers, nu după cine e cunoscut",
+      "Bugetul se duce în vizualizări, nu în comision de intermediar",
+      "Cifrele vin din API-ul oficial TikTok, în timp ce campania rulează",
+    ],
+
+    unspentLabel: "Neconsumat, încă al tău",
+    unspentNote: "Se consumă doar pe vizualizări măsurate; restul se întoarce la închidere.",
+
+    smallCreatorsLabel: (ceiling: string) => `Vizualizări de la creatori sub ${ceiling} urmăritori`,
+    smallCreatorsNote:
+      "Oameni pe care o agenție nu ți i-ar fi propus. Aici au intrat pentru că au livrat.",
+
+    measuredLabel: "Citiri reușite din API",
+    measuredNote: "Măsurat, nu estimat. Ce nu s-a putut citi e marcat ca atare.",
+
+    closing:
+      "Nu contează cine are cei mai mulți urmăritori. Contează al cui clip a mers — iar asta se vede în cifre, nu în argumente.",
+  },
+  analytics: {
+    title: "Analize",
+    subtitle: "Cum se mișcă vizualizările și cât te costă, pe fiecare campanie.",
+    viewsOverTime: "Vizualizări validate, 30 de zile",
+    cpmByCampaign: "Cost pe campanie",
+    coverageTitle: "Acoperirea măsurătorii",
+    coverageValue: (succeeded: string, expected: string) => `${succeeded} din ${expected}`,
+    coverageHint: "citiri reușite din API",
+    coverageNote:
+      "Citirile eșuate sunt înregistrate ca atare, nu completate prin estimare. Dacă o citire lipsește, vezi că lipsește — nu o interpolăm.",
+    table: {
+      campaign: "Campanie",
+      views: "Vizualizări validate",
+      spent: "Cheltuit",
+      cpm: "Cost / 1.000",
+    },
+    noCpm: "—",
+    noCpmNote: "Campanie fără vizualizări măsurate încă.",
+  },
+  creators: {
+    title: "Creatori",
+    subtitle: "Cine ți-a filmat campaniile și cât a fost plătit pentru vizualizări validate.",
+    search: "Caută după nume sau cont",
+    noResults: "Niciun creator care să se potrivească.",
+    totalCreators: "Creatori",
+    totalValidatedViews: "Vizualizări validate",
+    totalPaid: "Plătit către creatori",
+    table: {
+      creator: "Creator",
+      campaigns: "Campanii",
+      views: "Vizualizări validate",
+      earned: "Încasat",
+    },
+    campaignsCount: (n: number) => (n === 1 ? "1 campanie" : `${n} campanii`),
+  },
+  approvals: {
+    navLabel: "Aprobări",
+    title: "Clipuri de aprobat",
+    subtitle:
+      "Creatorul urcă aici clipul înainte să-l posteze pe TikTok. Tu spui da sau nu — Vira nu publică nimic în locul lui.",
+    pendingCount: (n: number) => (n === 1 ? "1 clip așteaptă" : `${n} clipuri așteaptă`),
+    emptyTitle: "Nimic de aprobat",
+    emptyText: "Când un creator urcă un clip, apare aici.",
+    selectPrompt: "Alege un clip din listă.",
+    backToList: "Înapoi la listă",
+
+    submitted: "Trimis",
+    duration: (seconds: number) => `${seconds} sec`,
+    followers: "urmăritori",
+    caption: "Descrierea propusă",
+    checksTitle: "Verificări automate",
+    checksNote:
+      "Verificările sunt un ajutor, nu o decizie. Ce nu se poate verifica automat e marcat ca atare, nu trecut cu vederea.",
+    checkStatus: { pass: "Trecut", warn: "De verificat", fail: "Picat" },
+
+    approve: "Aprobă clipul",
+    reject: "Respinge",
+    rejectTitle: "De ce respingi clipul",
+    rejectSubtitle:
+      "Creatorul vede exact ce scrii aici. Un motiv concret îi spune ce să schimbe; „nu-mi place” nu.",
+    reasonLabel: "Motiv",
+    reasons: {
+      "missing-requirement": "Lipsește o cerință din campanie",
+      "misleading-claim": "Afirmație care induce în eroare",
+      legal: "Problemă legală sau de drepturi",
+      "off-brand": "Nu se potrivește cu brandul",
+    },
+    noteLabel: "Ce anume trebuie schimbat",
+    notePlaceholder: "Ex.: lipsește #KaffaRoasters și clipul are 14 sec, minimul e 20.",
+    noteRequired: "Scrie motivul concret — fără el nu poți respinge.",
+    confirmReject: "Trimite respingerea",
+    cancelReject: "Renunță",
+
+    decidedTitle: "Decizii recente",
+    decision: { approved: "Aprobat", rejected: "Respins" },
+    approvedToast: (handle: string) => `Clipul lui ${handle} a fost aprobat. Poate posta.`,
+    rejectedToast: (handle: string) => `Clipul lui ${handle} a fost respins, cu motiv.`,
   },
   common: {
     demoData: "date demo",

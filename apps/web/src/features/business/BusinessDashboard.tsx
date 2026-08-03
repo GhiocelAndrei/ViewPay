@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "../../components/Icon";
 import {
   Button,
@@ -11,9 +12,11 @@ import {
   StatTile,
 } from "../../components/ui";
 import { cn } from "../../lib/cn";
+import ValueProofPanel from "./ValueProofPanel";
+import { useBrandCampaigns } from "../../lib/brandCampaigns";
 import { t } from "@vira/core";
 import { formatCompactNumber, formatMoney, formatViews } from "@vira/core";
-import { brandCampaigns, brandSummary, leaderboard } from "@vira/core";
+import { brandSummary, leaderboard } from "@vira/core";
 
 const statusTone = { active: "mint", draft: "neutral", closed: "primary" } as const;
 
@@ -26,7 +29,13 @@ const statusTone = { active: "mint", draft: "neutral", closed: "primary" } as co
  * on their own that a number was fake stops believing the ones that weren't.
  */
 export default function BusinessDashboard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const campaigns = useBrandCampaigns((state) => state.rows);
   const liveViews = useLiveViewCounter(brandSummary.liveTestClipViews);
+
+  /** Set by the creation flow on its way back here. */
+  const created = (location.state as { created?: string } | null)?.created;
 
   // Display-only ratio; no money value is derived from it.
   const budgetPercent = Math.round((brandSummary.totalSpentMinor / brandSummary.budgetMinor) * 100);
@@ -37,11 +46,24 @@ export default function BusinessDashboard() {
         title={t.brand.welcome(brandSummary.brandName)}
         subtitle={t.brand.subtitle}
         action={
-          <Button icon="add_circle" variant="primary">
+          <Button
+            icon="add_circle"
+            variant="primary"
+            onClick={() => navigate("/brand/campanii/nou")}
+          >
             {t.brand.newCampaign}
           </Button>
         }
       />
+
+      {created && (
+        <Card className="mt-6 animate-fade-up border-mint/20 bg-mint/5 p-4">
+          <p className="flex items-center gap-2 text-[14px] text-mint">
+            <Icon name="check_circle" size={18} filled />
+            {t.newCampaign.created(created)}
+          </p>
+        </Card>
+      )}
 
       {/* Live measurement — the one number on this screen that is not simulated. */}
       <Card className="mt-8 border-primary/20 bg-primary/5 p-6">
@@ -66,6 +88,10 @@ export default function BusinessDashboard() {
           </div>
         </div>
       </Card>
+
+      {/* The live counter proves the measurement is real; this explains why that
+          changes what the brand is actually paying for. */}
+      <ValueProofPanel />
 
       {/* Aggregate stats */}
       <div className="mt-6 flex items-center justify-between">
@@ -167,7 +193,7 @@ export default function BusinessDashboard() {
               </tr>
             </thead>
             <tbody>
-              {brandCampaigns.map((campaign) => (
+              {campaigns.map((campaign) => (
                 <tr key={campaign.id} className="border-b border-white/[0.03] last:border-0">
                   <td className="px-6 py-4">
                     <p className="font-body text-[14px] font-semibold text-on-surface">
@@ -201,7 +227,7 @@ export default function BusinessDashboard() {
 
         {/* Phone: the same rows as cards. Sideways-scrolling tables are not parity. */}
         <div className="divide-y divide-white/[0.03] md:hidden">
-          {brandCampaigns.map((campaign) => {
+          {campaigns.map((campaign) => {
             const used = Math.round((campaign.spentMinor / campaign.budgetMinor) * 100);
             return (
               <div key={campaign.id} className="px-5 py-4">

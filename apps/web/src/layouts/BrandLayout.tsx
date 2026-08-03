@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from "../components/Icon";
+import { SurfaceBackdrop } from "../components/SurfaceBackdrop";
 import { cn } from "../lib/cn";
 import { t } from "@vira/core";
 import { useSession } from "../lib/session";
@@ -7,6 +8,7 @@ import { brandSummary } from "@vira/core";
 
 const navItems = [
   { to: "/brand", icon: "campaign", label: t.nav.campaigns, end: true },
+  { to: "/brand/aprobari", icon: "fact_check", label: t.approvals.navLabel, end: false },
   { to: "/brand/analize", icon: "insights", label: t.nav.analytics, end: false },
   { to: "/brand/creatori", icon: "group", label: t.nav.creators, end: false },
 ];
@@ -25,7 +27,9 @@ export function BrandLayout() {
   }
 
   return (
-    <div className="min-h-full bg-background">
+    <div className="relative min-h-full">
+      <SurfaceBackdrop />
+
       <header className="sticky top-0 z-30 border-b border-white/5 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-container items-center gap-8 px-6 py-4 md:px-12">
           {/* Identity on the left, mirroring the creator app. */}
@@ -94,7 +98,7 @@ export function BrandLayout() {
       </header>
 
       {/* pb clears the fixed tab bar on phones. */}
-      <div className="pb-24 md:pb-0">
+      <div className="relative z-10 pb-24 md:pb-0">
         <Outlet />
       </div>
 

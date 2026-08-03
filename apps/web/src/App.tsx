@@ -2,14 +2,20 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-d
 import { BrandLayout } from "./layouts/BrandLayout";
 import { CreatorLayout } from "./layouts/CreatorLayout";
 import { GuestOnly, RequireRole } from "./routes/guards";
+import AnalyticsPage from "./features/business/AnalyticsPage";
+import ApprovalQueue from "./features/business/ApprovalQueue";
 import AssistantPanel from "./features/assistant/AssistantPanel";
 import BusinessDashboard from "./features/business/BusinessDashboard";
 import CampaignsPage from "./features/campaigns/CampaignsPage";
+import CreatorsPage from "./features/business/CreatorsPage";
 import EarningsPage from "./features/earnings/EarningsPage";
 import FeedPage from "./features/feed/FeedPage";
 import LandingPage from "./features/marketing/LandingPage";
+import NewCampaignPage from "./features/business/NewCampaignPage";
 import PortraitPage from "./features/portrait/PortraitPage";
 import SignInPage from "./features/auth/SignInPage";
+import CreatorSignInPage from "./features/auth/CreatorSignInPage";
+import BrandAccountPage from "./features/auth/BrandAccountPage";
 
 /**
  * One app, three audiences (BUILD_PLAN D13):
@@ -38,11 +44,30 @@ export default function App() {
             </GuestOnly>
           }
         />
+        {/* Three entry screens, not one: `/intra` only picks a side, and the two
+            below are the actual doors. A creator signs in with TikTok and never
+            registers; a business registers an account of its own. */}
         <Route
           path="/intra"
           element={
             <GuestOnly>
               <SignInPage />
+            </GuestOnly>
+          }
+        />
+        <Route
+          path="/intra/creator"
+          element={
+            <GuestOnly>
+              <CreatorSignInPage />
+            </GuestOnly>
+          }
+        />
+        <Route
+          path="/intra/afacere"
+          element={
+            <GuestOnly>
+              <BrandAccountPage />
             </GuestOnly>
           }
         />
@@ -71,8 +96,10 @@ export default function App() {
           }
         >
           <Route path="/brand" element={<BusinessDashboard />} />
-          <Route path="/brand/analize" element={<BusinessDashboard />} />
-          <Route path="/brand/creatori" element={<BusinessDashboard />} />
+          <Route path="/brand/campanii/nou" element={<NewCampaignPage />} />
+          <Route path="/brand/aprobari" element={<ApprovalQueue />} />
+          <Route path="/brand/analize" element={<AnalyticsPage />} />
+          <Route path="/brand/creatori" element={<CreatorsPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

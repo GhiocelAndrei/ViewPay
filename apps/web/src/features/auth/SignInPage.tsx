@@ -1,133 +1,105 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "../../components/Icon";
-import { Logo } from "../../components/Logo";
 import { cn } from "../../lib/cn";
-import { t, tokens, feedCampaigns } from "@vira/core";
-import { homeFor, useSession } from "../../lib/session";
+import { t } from "@vira/core";
+import { AuthShell } from "./AuthShell";
 
 /**
- * Sign-in. Two doors, one screen.
+ * Which side are you on.
  *
- * TODO(auth): "Continue with TikTok" must redirect to the gateway's OAuth start
- * route, and the brand door to the Firebase flow. Both end with the backend
- * issuing an HttpOnly session cookie — the SPA never holds a token
- * (BUILD_PLAN D5). The local role store only renders chrome.
+ * This screen no longer signs anyone in — it routes. The two doors lead to
+ * genuinely different flows: a creator authenticates with TikTok and never
+ * creates an account here, a business fills in a registration form. Collapsing
+ * that into one button would have to lie about one of them.
+ *
+ * Anything the guards were trying to reach is forwarded along, so a creator
+ * bounced off `/castiguri` still lands there after TikTok returns.
  */
 export default function SignInPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const signInAsCreator = useSession((state) => state.signInAsCreator);
-  const signInAsBrand = useSession((state) => state.signInAsBrand);
 
-  // Where the guard sent us from, if anywhere.
   const intended = (location.state as { from?: string } | null)?.from;
 
-  function enter(role: "creator" | "brand") {
-    if (role === "creator") signInAsCreator();
-    else signInAsBrand();
-    navigate(intended ?? homeFor(role), { replace: true });
+  function go(path: string, mode?: "login" | "register") {
+    navigate(path, { state: { from: intended, mode } });
   }
 
+  const doors = [
+    {
+      path: "/intra/creator",
+      icon: "music_note",
+      title: t.signIn.creatorTitle,
+      text: t.signIn.creatorText,
+      primary: true,
+      // No mode: a creator has nothing to register. TikTok is the account.
+      mode: undefined,
+    },
+    {
+      path: "/intra/afacere",
+      icon: "business_center",
+      title: t.signIn.brandTitle,
+      text: t.signIn.brandText,
+      primary: false,
+      // This screen is reached from "Loghează-te", so a business arriving here
+      // already has an account. The landing page's own call to action is what
+      // opens the registration form instead.
+      mode: "login" as const,
+    },
+  ];
+
   return (
-    <div className="grid min-h-full lg:grid-cols-2">
-      {/* Left: proof wall */}
-      <div className="relative hidden overflow-hidden lg:block">
-        <div className="absolute inset-0 grid grid-cols-3 gap-3 p-6 opacity-40 blur-[2px]">
-          {[...feedCampaigns, ...feedCampaigns].slice(0, 9).map((campaign, index) => (
-            <div
-              key={`${campaign.id}-${index}`}
-              className="rounded-lg border border-white/5"
-              style={{ background: tokens.gradientCss(campaign.gradientStops) }}
-            />
-          ))}
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/85 to-background/40" />
-
-        <div className="relative flex h-full flex-col justify-end p-12">
-          <p className="numeric text-[56px] font-bold leading-none text-primary">€134.000</p>
-          <p className="label-caps mt-2">{t.signIn.paidOut}</p>
-        </div>
-      </div>
-
-      {/* Right: the two doors */}
-      <div className="flex items-center justify-center px-6 py-16 md:px-12">
-        <div className="w-full max-w-md">
-          <Link to="/">
-            <Logo size={44} wordmarkClassName="text-[22px]" />
-          </Link>
-
-          <h1 className="mt-12 font-display text-headline-lg leading-tight text-on-surface">
-            {t.signIn.title}
-          </h1>
-          <p className="mt-3 text-body-md text-on-surface-variant">{t.signIn.subtitle}</p>
-
-          <div className="mt-10 flex flex-col gap-3">
-            <button
-              type="button"
-              onClick={() => enter("creator")}
-              className={cn(
-                "group flex items-start gap-4 rounded-lg border border-primary/30 bg-primary/5 p-5 text-left",
-                "transition-colors hover:border-primary/60 hover:bg-primary/10",
-              )}
-            >
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-on-primary">
-                <Icon name="music_note" size={22} />
-              </div>
-              <div className="flex-1">
-                <p className="font-display text-[16px] font-bold text-on-surface">
-                  {t.signIn.creatorTitle}
-                </p>
-                <p className="mt-1 text-[13px] leading-relaxed text-on-surface-variant">
-                  {t.signIn.creatorText}
-                </p>
-              </div>
-              <Icon
-                name="arrow_forward"
-                size={20}
-                className="mt-1 text-primary transition-transform group-hover:translate-x-1"
-              />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => enter("brand")}
-              className={cn(
-                "group flex items-start gap-4 rounded-lg border border-white/10 p-5 text-left",
-                "transition-colors hover:border-white/25 hover:bg-white/[0.03]",
-              )}
-            >
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5">
-                <Icon name="business_center" size={22} className="text-on-surface-variant" />
-              </div>
-              <div className="flex-1">
-                <p className="font-display text-[16px] font-bold text-on-surface">
-                  {t.signIn.brandTitle}
-                </p>
-                <p className="mt-1 text-[13px] leading-relaxed text-on-surface-variant">
-                  {t.signIn.brandText}
-                </p>
-              </div>
-              <Icon
-                name="arrow_forward"
-                size={20}
-                className="mt-1 text-on-surface-variant transition-transform group-hover:translate-x-1"
-              />
-            </button>
-          </div>
-
-          <p className="mt-8 text-[12px] leading-relaxed text-on-surface-variant/60">
-            {t.signIn.legal}
-          </p>
-
-          <Link
-            to="/"
-            className="mt-6 inline-flex items-center gap-1.5 text-[13px] text-on-surface-variant transition-colors hover:text-on-surface"
+    <AuthShell title={t.signIn.title} subtitle={t.signIn.subtitle}>
+      <div className="flex flex-col gap-3">
+        {doors.map((door) => (
+          <button
+            key={door.path}
+            type="button"
+            onClick={() => go(door.path, door.mode)}
+            className={cn(
+              "group flex items-start gap-4 rounded-lg border p-5 text-left transition-colors",
+              door.primary
+                ? "border-primary/30 bg-primary/5 hover:border-primary/60 hover:bg-primary/10"
+                : "border-white/10 hover:border-white/25 hover:bg-white/[0.03]",
+            )}
           >
-            <Icon name="arrow_back" size={16} />
-            {t.signIn.backToSite}
-          </Link>
-        </div>
+            <span
+              className={cn(
+                "grid h-11 w-11 shrink-0 place-items-center rounded-full",
+                door.primary
+                  ? "bg-primary text-on-primary"
+                  : "border border-white/10 bg-white/5 text-on-surface-variant",
+              )}
+            >
+              <Icon name={door.icon} size={22} />
+            </span>
+            <span className="flex-1">
+              <span className="block font-display text-[16px] font-bold text-on-surface">
+                {door.title}
+              </span>
+              <span className="mt-1 block text-[13px] leading-relaxed text-on-surface-variant">
+                {door.text}
+              </span>
+            </span>
+            <Icon
+              name="arrow_forward"
+              size={20}
+              className={cn(
+                "mt-1 transition-transform group-hover:translate-x-1",
+                door.primary ? "text-primary" : "text-on-surface-variant",
+              )}
+            />
+          </button>
+        ))}
       </div>
-    </div>
+
+      <Link
+        to="/"
+        className="mt-8 inline-flex items-center gap-1.5 text-[13px] text-on-surface-variant transition-colors hover:text-on-surface"
+      >
+        <Icon name="arrow_back" size={16} />
+        {t.signIn.backToSite}
+      </Link>
+    </AuthShell>
   );
 }

@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Icon } from "../../components/Icon";
 import { Card, PageHeader } from "../../components/ui";
 import { cn } from "../../lib/cn";
 import { t } from "@vira/core";
-import { assistantThread } from "@vira/core";
+import { assistantThread, feedCampaigns } from "@vira/core";
 
 interface Message {
   role: "user" | "assistant";
@@ -20,7 +21,24 @@ interface Message {
  * gateway (which fronts ai-service). The frontend never calls ai-service directly.
  */
 export default function AssistantPanel() {
-  const [messages, setMessages] = useState<Message[]>([...assistantThread]);
+  const location = useLocation();
+
+  /**
+   * Arriving from a feed card carries that campaign in as context, so the
+   * assistant opens on the creator's actual question instead of a blank thread.
+   * The campaign is resolved from its id rather than passed whole — router
+   * state survives a refresh and must not be trusted to still be accurate.
+   */
+  const campaignId = (location.state as { campaignId?: string } | null)?.campaignId;
+  const campaign = campaignId
+    ? feedCampaigns.find((item) => item.id === campaignId) ?? null
+    : null;
+
+  const [messages, setMessages] = useState<Message[]>(() =>
+    campaign
+      ? [{ role: "user", text: t.assistant.campaignQuestion(campaign.hook) }]
+      : [...assistantThread],
+  );
   const [draft, setDraft] = useState("");
 
   function send(text: string) {
@@ -33,6 +51,24 @@ export default function AssistantPanel() {
   return (
     <div className="mx-auto flex h-[calc(100dvh-70px)] max-w-4xl flex-col px-6 py-10 md:px-12">
       <PageHeader title={t.assistant.title} subtitle={t.assistant.subtitle} />
+
+      {campaign && (
+        <div
+          className="mt-6 flex items-center gap-3 rounded-lg border px-4 py-3"
+          style={{
+            borderColor: `${campaign.accent}33`,
+            backgroundColor: `${campaign.accent}12`,
+          }}
+        >
+          <Icon name="campaign" size={18} style={{ color: campaign.accent }} />
+          <div className="min-w-0">
+            <p className="truncate font-body text-[13px] font-semibold text-on-surface">
+              {t.assistant.campaignContext(campaign.brandName)}
+            </p>
+            <p className="truncate text-[12px] text-on-surface-variant">„{campaign.hook}”</p>
+          </div>
+        </div>
+      )}
 
       <div className="mt-8 flex-1 space-y-4 overflow-y-auto pr-1">
         {messages.map((message, index) => (
