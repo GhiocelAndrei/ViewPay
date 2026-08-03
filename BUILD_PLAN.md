@@ -64,6 +64,9 @@ frontend → backend(.NET gateway) → ai-service (HTTP; queue for async pipelin
 ```
 
 ### D2 — Frontend stack ✅
+*Scope narrowed by D13: this describes the **web** app (public landing + brand dashboard).
+The creator app is React Native + Expo — see D13.*
+
 Pure UI SPA. **React + Vite + TypeScript.**
 - Routing: React Router · Server state: TanStack Query (also powers live-view polling)
 - Client state: Zustand · Forms: React Hook Form + Zod · Charts: Recharts
@@ -151,8 +154,8 @@ Every lane swappable later (Gemini / Fable 5 / local).
 **Full task router (4 lanes):**
 | Lane | Model | Demo status |
 |---|---|---|
-| Vision (cover images now; frames later) | `claude-opus-4-8` (multimodal, high-res) | **active** — ~20 cover thumbnails |
-| Creative/brand reasoning (portrait synthesis, brainstorm) | `claude-opus-4-8`, adaptive thinking, effort high | **active** |
+| Vision (cover images now; frames later) | `claude-opus-5` (multimodal, high-res) | **active** — ~20 cover thumbnails |
+| Creative/brand reasoning (portrait synthesis, brainstorm) | `claude-opus-5`, adaptive thinking, effort high | **active** |
 | Compliance / normalization (light, cheap) | `claude-haiku-4-5` | active (light use in demo) |
 | Audio transcription | local **Whisper** (faster-whisper) | **stubbed** — day-60 pipeline |
 
@@ -211,3 +214,115 @@ put both under **one registrable domain** — e.g. `app.vira.com` (Vercel) + `ap
 (Azure), cookie `Domain=.vira.com`. If we ship on default `*.vercel.app` + `*.azurecontainerapps.io`
 domains instead, cookies must be **SameSite=None; Secure** with credentialed CORS pinned to the exact
 frontend origin. **Recommend the custom-domain path** to preserve the D5 security model.
+
+### D13 — Web first, one app; native derived from it later ✅
+
+**Current decision (supersedes two earlier drafts of D13: a Capacitor wrap, then a
+split into two parallel frontends).**
+
+**The web app is the product.** `apps/web` carries the whole thing — public landing,
+the creator app (scroll feed, campaigns, portrait, earnings, assistant) and the brand
+dashboard — behind one router and one role store. Nothing is split off, and no audience
+has to leave for a second URL.
+
+**The phone app comes later and is derived from these screens.** They are the source of
+truth for layout, copy and behaviour, not a preview of something else. `apps/mobile`
+(Expo + React Native + NativeWind) already exists as a working head start with the five
+creator screens ported and Expo Router wired — it is **parked**, not on the critical
+path. Revisit the native route once the web app is settled; the porting decision (React
+Native vs. wrapping the built SPA) stays open until then, and `packages/core` keeps the
+shared logic renderer-agnostic either way so neither choice is foreclosed.
+
+Everything below describes that parked Expo app.
+
+---
+
+*Historical note: an earlier draft proposed wrapping the Vite SPA in Capacitor, and a
+later one proposed two parallel frontends. Both are superseded by the above.*
+
+**What forces the decision:** the contract commits to the iPhone app being **submitted to the App
+Store by day 90**. D2's React + Vite SPA has no path to the App Store.
+
+**The insight that shapes it: only the creator surface ever becomes a *store* app.** The native
+app is ~5 creator screens: feed, campaigns, portrait, earnings, assistant.
+
+**Brands are not desktop-only — they are store-app-only.** A brand manager must be able to do
+everything from a phone: create a campaign, fund it, approve content, read results. That is
+delivered by making `apps/web` **fully responsive**, not by shipping a second native app. The
+distinction matters because of money: budgets are funded in a browser, so Apple's IAP rule
+(guideline 3.1.1) never enters the conversation. Precedent would probably protect a brand app
+anyway — Meta Ads Manager, Google Ads and TikTok Ads Manager all charge outside IAP because
+advertising is a real-world service — but "probably" is not worth a rejection cycle when
+responsive web gives full parity for free.
+
+**Consequence for the web app:** `apps/web` is no longer "desktop". It is desktop-first for the
+dense analytics views and mobile-capable everywhere, with real mobile navigation (bottom tab
+bar) rather than a shrunken desktop nav. Data tables reflow into card lists below `md` — a
+horizontally-scrolling table is not parity.
+
+*If a brand app in the App Store is ever wanted, it goes in `apps/mobile` behind role-based
+routing, and campaign funding must open in an external browser — reopen this decision then.*
+
+**Decision: React Native + Expo for the creator app; the Vite app stays for landing + brand.**
+
+```
+apps/
+  mobile/    Expo (React Native) — creator app: iOS, Android, and web via React Native Web
+  web/       Vite + React — public landing + brand dashboard. Responsive: full parity on a
+             phone browser. Not a store app (keeps campaign funding outside Apple IAP).
+packages/
+  core/      money, i18n, domain types, fixtures — plain TS, imported by BOTH apps
+  contracts/ types generated from the .NET OpenAPI spec
+```
+
+| Concern | Choice | Note |
+|---|---|---|
+| Navigation | **Expo Router** | File-based; the route tree already exists conceptually in `App.tsx` |
+| Styling | **NativeWind v4** | Tailwind syntax in RN — the Lumina Dark tokens port nearly mechanically, and the team already writes Tailwind |
+| Gradients | `expo-linear-gradient` | Replaces CSS `linear-gradient` on campaign cards |
+| Glass / blur | `expo-blur` | Native blur is *better* than `backdrop-filter`; degrades on RN Web (see risk) |
+| Feed paging | `FlatList` + `pagingEnabled` | Replaces CSS `scroll-snap`; native momentum instead of emulated |
+| Push | `expo-notifications` + APNs | The capability that justifies the app existing |
+| Clip upload | `expo-image-picker` | Camera roll access; also the strongest answer to guideline 4.2 |
+| Video (later) | `expo-video` | Not needed while the feed shows campaign cards, not clips |
+| Builds / OTA | **EAS Build + EAS Update** | Ships JS fixes without a review cycle — valuable during the pilot |
+
+**What carries over from the existing Vite frontend, unchanged:** `lib/money.ts`, `lib/i18n.ts`,
+`mocks/data.ts` and the design tokens — all plain TypeScript, moving to `packages/core`. The
+landing page and brand dashboard stay exactly as they are. **What gets rewritten:** the five
+creator screens, in RN primitives.
+
+**Risks, stated plainly:**
+- **Rewrite cost is real** — five screens, plus the monorepo restructure. This is the price paid
+  for a genuinely native creator app rather than a wrapped website.
+- **React Native Web is the weak edge.** The creator app renders to web through RN Web so it can
+  be demoed in a desktop browser, but blur/glass and some layout fidelity degrade there. If the
+  day-30 demo wants the creator app at full fidelity, **show it on a device or simulator** —
+  which is more convincing than a browser tab anyway. Decide this before demo rehearsal, not on
+  the day.
+- **Guideline 4.2 stops being a threat.** A real RN app with push and camera access is not a
+  thin wrapper. This was the main risk under the Capacitor route and it disappears here.
+- **Apple Developer Program enrollment still starts in week 1.** Organization enrollment needs a
+  D-U-N-S number and Apple's own verification — calendar we do not control, unchanged by this
+  decision.
+- Android comes from the same Expo codebase and is published after the pilot.
+
+### D14 — Internationalization from day 1 ✅
+
+UI copy lives in a translation layer (`react-i18next` or equivalent), never hardcoded in
+components. The demo is presented in **Romanian** to a Romanian client, for Romanian creators —
+but the codebase, identifiers, and comments stay English (see `CLAUDE.md`). Retrofitting i18n
+after the feed and campaign screens exist costs days; doing it from the first component costs
+nothing.
+
+---
+
+## Open decisions
+
+Tracked here so they are resolved deliberately rather than by whoever writes the code first.
+
+| # | Decision | Status |
+|---|---|---|
+| 1 | **Storage currency.** Product docs quote EUR; `Money` documents itself as RON *bani*. Romanian invoicing (e-Factura) and PFA payouts are RON; brand budgets are quoted in EUR. | **Open — blocks payout code.** Pick one storage currency, record it here, and align `Money`'s doc comment with it. |
+| 2 | **Post capture: pasted link vs. automatic detection.** Both use the same `video.list` access; the difference is UX friction versus detection latency. | Open — decide during build; not blocking. |
+| 3 | **Clip source for the AI portrait.** The API returns metadata and cover images, never video files. Working assumption: the creator uploads 3–5 clips at onboarding, and the portrait is enriched from campaign data over time. | Assumption in force — validate in the first two weeks. |
