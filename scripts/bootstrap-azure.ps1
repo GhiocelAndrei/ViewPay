@@ -11,7 +11,7 @@ param(
   [Parameter(Mandatory)] [string] $SubscriptionId,
   [string] $ResourceGroup  = 'vira-rg',
   [string] $Location       = 'westeurope',
-  [string] $GithubRepo     = 'GhiocelAndrei/ViewPay',   # must match the real GitHub repo
+  [string] $GithubRepo     = 'GhiocelAndrei/Vira',   # must match the real GitHub repo
   [string] $AppDisplayName = 'vira-github-oidc'
 )
 
@@ -30,6 +30,16 @@ Write-Host "GitHub repo  : $GithubRepo`n"
 az account set --subscription $SubscriptionId; Assert-LastExit "az account set failed - run 'az login'?"
 $TenantId = az account show --query tenantId -o tsv
 
+Write-Host 'Registering resource providers (subscription-level, one-time)...'
+$providers = 'Microsoft.App','Microsoft.OperationalInsights','Microsoft.ContainerRegistry',
+             'Microsoft.ManagedIdentity','Microsoft.KeyVault','Microsoft.DBforPostgreSQL'
+foreach ($p in $providers) { az provider register --namespace $p | Out-Null }
+foreach ($try in 1..30) {
+  $pending = @($providers | Where-Object { (az provider show --namespace $_ --query registrationState -o tsv) -ne 'Registered' })
+  if ($pending.Count -eq 0) { Write-Host '   all registered'; break }
+  Start-Sleep -Seconds 10
+}
+
 Write-Host '1/5 Resource group...'
 az group create -n $ResourceGroup -l $Location -o none; Assert-LastExit "resource group create failed"
 
@@ -42,10 +52,16 @@ az ad sp show --id $AppId -o none 2>$null
 if ($LASTEXITCODE -ne 0) { az ad sp create --id $AppId -o none | Out-Null }
 
 Write-Host '3/5 Federated credential (main branch)...'
+# Read the repo's actual OIDC subject prefix from GitHub (it may embed immutable
+# owner/repo IDs), so we match exactly instead of guessing the format.
+$prefix = gh api "repos/$GithubRepo/actions/oidc/customization/sub" --jq '.sub_claim_prefix' 2>$null
+if ([string]::IsNullOrWhiteSpace($prefix)) { $prefix = "repo:$GithubRepo" }
+$subject = "${prefix}:ref:refs/heads/main"
+Write-Host "   subject: $subject"
 $fed = @{
   name      = 'github-main'
   issuer    = 'https://token.actions.githubusercontent.com'
-  subject   = "repo:${GithubRepo}:ref:refs/heads/main"
+  subject   = $subject
   audiences = @('api://AzureADTokenExchange')
 } | ConvertTo-Json -Compress
 $tmp = New-TemporaryFile

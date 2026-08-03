@@ -24,6 +24,18 @@ echo
 az account set --subscription "$SUBSCRIPTION_ID"
 TENANT_ID=$(az account show --query tenantId -o tsv)
 
+echo "Registering resource providers (subscription-level, one-time)…"
+PROVIDERS="Microsoft.App Microsoft.OperationalInsights Microsoft.ContainerRegistry Microsoft.ManagedIdentity Microsoft.KeyVault Microsoft.DBforPostgreSQL"
+for p in $PROVIDERS; do az provider register --namespace "$p" >/dev/null 2>&1; done
+for i in $(seq 1 30); do
+  pending=""
+  for p in $PROVIDERS; do
+    [ "$(az provider show --namespace "$p" --query registrationState -o tsv 2>/dev/null)" = "Registered" ] || pending="$pending $p"
+  done
+  [ -z "$pending" ] && { echo "   all registered"; break; }
+  sleep 10
+done
+
 echo "1/5 Resource group…"
 az group create -n "$RESOURCE_GROUP" -l "$LOCATION" -o none
 
@@ -35,10 +47,15 @@ fi
 az ad sp show --id "$APP_ID" >/dev/null 2>&1 || az ad sp create --id "$APP_ID" -o none
 
 echo "3/5 Federated credential (main branch)…"
+# Read the repo's actual OIDC subject prefix from GitHub (may embed immutable IDs).
+PREFIX=$(gh api "repos/${GITHUB_REPO}/actions/oidc/customization/sub" --jq '.sub_claim_prefix' 2>/dev/null || true)
+[ -n "$PREFIX" ] || PREFIX="repo:${GITHUB_REPO}"
+SUBJECT="${PREFIX}:ref:refs/heads/main"
+echo "   subject: $SUBJECT"
 az ad app federated-credential create --id "$APP_ID" --parameters "{
   \"name\": \"github-main\",
   \"issuer\": \"https://token.actions.githubusercontent.com\",
-  \"subject\": \"repo:${GITHUB_REPO}:ref:refs/heads/main\",
+  \"subject\": \"${SUBJECT}\",
   \"audiences\": [\"api://AzureADTokenExchange\"]
 }" >/dev/null 2>&1 || echo "   (federated cred already exists — ok)"
 

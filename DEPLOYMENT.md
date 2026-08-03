@@ -18,6 +18,9 @@ GitHub → Azure    → OIDC federated (no stored cloud secret)
 - `gh auth login` (GitHub CLI) — you're on 2.57 ✓
 - A Vercel account
 - Your Azure **subscription id**
+- Subscription **Owner/Contributor** for the bootstrap (it registers the required resource
+  providers — `Microsoft.App`, `.OperationalInsights`, `.ContainerRegistry`, `.ManagedIdentity`,
+  `.KeyVault`, `.DBforPostgreSQL`; the RG-scoped deploy principal can't do this itself).
 
 ## 1. Bootstrap Azure + GitHub (one time)
 
@@ -37,13 +40,16 @@ SUBSCRIPTION_ID=<your-sub-id> "/c/Program Files/Git/bin/bash.exe" scripts/bootst
 
 Then set the Postgres password (and optionally the Anthropic key):
 ```
-gh secret set POSTGRES_ADMIN_PASSWORD --repo GhiocelAndrei/ViewPay   # required (strong password)
-gh secret set ANTHROPIC_API_KEY        --repo GhiocelAndrei/ViewPay   # optional (AI features)
+gh secret set POSTGRES_ADMIN_PASSWORD --repo GhiocelAndrei/Vira   # required (strong password)
+gh secret set ANTHROPIC_API_KEY        --repo GhiocelAndrei/Vira   # optional (AI features)
 ```
 
-> The scripts default `-GithubRepo` to `GhiocelAndrei/ViewPay` (your current repo). If you rename
-> the GitHub repo to `Vira`, rename it on GitHub, run `git remote set-url origin ...`, and pass
-> `-GithubRepo GhiocelAndrei/Vira`.
+> The scripts default `-GithubRepo` to `GhiocelAndrei/Vira`. They read the OIDC **subject** from
+> GitHub's `sub_claim_prefix` (this repo's is `repo:GhiocelAndrei@105803228/Vira@1320112592`, i.e.
+> it embeds immutable owner/repo IDs), so the federated credential matches exactly regardless of
+> future renames. If `azure/login` ever fails with `AADSTS700213 No matching federated identity`,
+> the credential subject doesn't match the run's `subject claim` (shown in the failed log) — re-run
+> the bootstrap or add a credential with that exact subject.
 
 This sets: secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`,
 `POSTGRES_ADMIN_PASSWORD`, `ANTHROPIC_API_KEY`; variables `AZURE_RESOURCE_GROUP`, `AZURE_LOCATION`.
@@ -68,14 +74,18 @@ Get the backend URL:
 az containerapp show -n vira-backend -g <rg> --query properties.configuration.ingress.fqdn -o tsv
 ```
 
-## 4. Frontend on Vercel
+## 4. Frontend on Vercel (npm workspace — build driven by root `vercel.json`)
 
-1. Vercel → **Add New → Project** → import `GhiocelAndrei/ViewPay`.
-2. **Root Directory = `frontend`** (framework auto-detects as Vite via `frontend/vercel.json`).
-3. Environment variables:
-   - `VITE_API_BASE_URL` = `https://<backend-fqdn>` (from step 3)
-   - `VITE_FIREBASE_*` (when auth lands)
-4. Deploy. Vercel now auto-deploys `main` (production) and **every PR gets a preview URL**.
+The web app is a workspace member (`apps/web`) that imports `@vira/core`, so Vercel **must
+install from the repo root**, and React 19 requires `--legacy-peer-deps`. The root `vercel.json`
+pins all of this (install `--legacy-peer-deps`, `npm run build:web`, output `apps/web/dist`, plus
+SPA rewrites), so the import needs **no manual overrides**.
+
+1. Vercel → **Add New → Project** → import `GhiocelAndrei/Vira` (authorize the GitHub app if asked).
+2. Leave **Root Directory = repo root** (the default). Vercel reads `vercel.json`.
+3. Project name `vira`. No custom domain for now → it serves at `vira-*.vercel.app`.
+4. (Later, when the API is wired) add env vars: `VITE_API_BASE_URL` = backend URL, `VITE_FIREBASE_*`.
+5. Deploy. Vercel now auto-deploys `main` (production) and gives **every PR a preview URL**.
 
 ## The per-change loop
 
