@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Vira",
+    "slug": "vira",
+    "scheme": "vira",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0E0F13",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "ro.vira.creator"
+    },
+    "android": {
+      "package": "ro.vira.creator",
+      "adaptiveIcon": {
+        "backgroundColor": "#0E0F13",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-router"]
+  }
+}

@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-body text-body-md antialiased;
+  }
+
+  /* Thin scrollbar — DESIGN.md keeps chrome out of the way. */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme("colors.background");
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme("colors.outline-variant");
+    border-radius: 10px;
+  }
+
+  ::selection {
+    background: rgba(202, 190, 255, 0.25);
+  }
+}
+
+@layer components {
+  /* Level 2 elevation: glassmorphic surface, 12px blur, 5% border. */
+  .glass {
+    background: rgba(26, 27, 35, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Level 1 elevation: cards and containers. */
+  .card-surface {
+    @apply rounded-lg border border-white/5 bg-surface-container-low;
+  }
+
+  .label-caps {
+    @apply font-body text-label-caps uppercase tracking-[0.08em] text-on-surface-variant;
+  }
+
+  /* Every currency value and view count goes through this. */
+  .numeric {
+    @apply font-data tabular-nums;
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+  user-select: none;
+}

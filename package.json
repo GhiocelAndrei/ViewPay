@@ -1,0 +1,22 @@
+{
+  "name": "vira",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "web": "npm run dev --workspace @vira/web",
+    "mobile": "npm run start --workspace @vira/mobile",
+    "build:web": "npm run build --workspace @vira/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "mobile:web": "npm run web --workspace @vira/mobile"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "tailwindcss": "~3.4.17"
+  }
+}
