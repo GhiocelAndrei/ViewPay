@@ -1,10 +1,15 @@
+using System.Text.Json.Serialization;
 using Vira.Abstractions.Settings;
 using Vira.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers (D3) + OpenAPI/Swagger (frontend generates types from the spec).
-builder.Services.AddControllers();
+// Serialize enums as their string names so the public API contract matches the ai-service
+// payload (and reads cleanly for the frontend + Python clients) rather than bare integers.
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
