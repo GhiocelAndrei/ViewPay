@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Vira.Abstractions.Settings;
 using Vira.Application.Interfaces;
 using Vira.Application.Mapping;
+using Vira.Application.Seed;
 using Vira.Application.Services;
 using Vira.DataAccess;
 
@@ -33,6 +34,10 @@ public static class ApplicationExtensions
             client.Timeout = TimeSpan.FromSeconds(ai.TimeoutSeconds);
         });
         services.AddHttpClient<ITikTokClient, TikTokClient>();
+
+        // Mocked creator data source (stands in for DB / TikTok until those land). Singleton so
+        // the Guids it generates at startup stay stable for the process lifetime.
+        services.AddSingleton<IMockCreatorSeed, MockCreatorSeed>();
 
         // TODO: register application services (IPortraitService, IMatchingService, ...)
         //       and FluentValidation validators here.

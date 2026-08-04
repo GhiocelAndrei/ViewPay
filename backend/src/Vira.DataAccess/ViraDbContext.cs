@@ -19,6 +19,7 @@ public class ViraDbContext(DbContextOptions<ViraDbContext> options) : DbContext(
     public DbSet<TikTokConnection> TikTokConnections => Set<TikTokConnection>();
     public DbSet<CreatorClip> CreatorClips => Set<CreatorClip>();
     public DbSet<CreatorPortrait> Portraits => Set<CreatorPortrait>();
+    public DbSet<CreatorQuestionnaire> CreatorQuestionnaires => Set<CreatorQuestionnaire>();
     public DbSet<Business> Businesses => Set<Business>();
     public DbSet<Campaign> Campaigns => Set<Campaign>();
     public DbSet<Match> Matches => Set<Match>();
