@@ -26,6 +26,16 @@ param aiImage string = 'mcr.microsoft.com/k8se/quickstart:latest'
 @description('Anthropic API key. Optional at provision; update in Key Vault before AI features.')
 param anthropicApiKey string = ''
 
+@secure()
+@description('Firebase Admin service-account JSON. Optional at provision; update in Key Vault before business auth.')
+param firebaseServiceAccountJson string = ''
+
+@description('Firebase project id (business auth).')
+param firebaseProjectId string = ''
+
+@description('Allowed browser origin for CORS — the deployed frontend URL (e.g. the Vercel app).')
+param allowedOrigin string = ''
+
 var suffix = uniqueString(resourceGroup().id)
 var acrName = 'acr${namePrefix}${suffix}'
 var kvName = 'kv-${namePrefix}-${suffix}'
@@ -128,6 +138,14 @@ resource anthropicSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'anthropic-api-key'
   properties: {
     value: empty(anthropicApiKey) ? 'REPLACE_ME' : anthropicApiKey
+  }
+}
+
+resource firebaseSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'firebase-service-account'
+  properties: {
+    value: empty(firebaseServiceAccountJson) ? 'REPLACE_ME' : firebaseServiceAccountJson
   }
 }
 
@@ -236,6 +254,11 @@ resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
           keyVaultUrl: '${keyVault.properties.vaultUri}secrets/postgres-connection-string'
           identity: uami.id
         }
+        {
+          name: 'firebase-service-account'
+          keyVaultUrl: '${keyVault.properties.vaultUri}secrets/firebase-service-account'
+          identity: uami.id
+        }
       ]
     }
     template: {
@@ -247,13 +270,16 @@ resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
           env: [
             { name: 'ConnectionStrings__Postgres', secretRef: 'postgres-connection' }
             { name: 'Ai__BaseUrl', value: 'https://${aiApp.properties.configuration.ingress.fqdn}' }
+            { name: 'Firebase__CredentialsJson', secretRef: 'firebase-service-account' }
+            { name: 'Firebase__ProjectId', value: firebaseProjectId }
+            { name: 'App__AllowedOrigins__0', value: allowedOrigin }
           ]
         }
       ]
       scale: { minReplicas: 1, maxReplicas: 3 }
     }
   }
-  dependsOn: [acrPull, kvSecretsUser, pgConnSecret]
+  dependsOn: [acrPull, kvSecretsUser, pgConnSecret, firebaseSecret]
 }
 
 // ---------------------------------------------------------------------------

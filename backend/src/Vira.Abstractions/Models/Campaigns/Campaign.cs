@@ -14,12 +14,24 @@ public class Campaign : Entity
 {
     public Guid BusinessId { get; set; }
     public string Title { get; set; } = string.Empty;
-    public string Brief { get; set; } = string.Empty;   // structured brief (JSONB)
-    public Money Budget { get; set; }                    // integer bani
+    public CampaignBrief Brief { get; set; } = new();    // structured brief (JSONB)
+    public Money Budget { get; set; }                    // integer EUR cents
     public CampaignStatus Status { get; set; } = CampaignStatus.Draft;
 
     public StyleVector TargetStyleVector { get; set; } = new();
     public CampaignAccessRule AccessRule { get; set; } = new();
+}
+
+/// <summary>Structured campaign brief (stored as JSONB). What the brand asks creators to do.</summary>
+public class CampaignBrief
+{
+    public CampaignObjective Objective { get; set; }
+    public List<string> Hashtags { get; set; } = [];
+    public string? Mention { get; set; }
+    public string DurationPreset { get; set; } = string.Empty;   // e.g. "15-60s"
+    public List<string> Requirements { get; set; } = [];         // predefined chips seeded by objective
+    public string ExtraRequirements { get; set; } = string.Empty; // free text
+    public string Message { get; set; } = string.Empty;           // free-text brief
 }
 
 /// <summary>Hard floor. The follower threshold gates product-placement campaigns (demo.docx).</summary>

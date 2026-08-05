@@ -39,8 +39,10 @@ public static class ApplicationExtensions
         // the Guids it generates at startup stay stable for the process lifetime.
         services.AddSingleton<IMockCreatorSeed, MockCreatorSeed>();
 
-        // TODO: register application services (IPortraitService, IMatchingService, ...)
-        //       and FluentValidation validators here.
+        // Business-side application services (DB-backed).
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IBusinessService, BusinessService>();
+        services.AddScoped<ICampaignService, CampaignService>();
 
         return services;
     }
