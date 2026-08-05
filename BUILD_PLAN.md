@@ -91,7 +91,7 @@ Pure UI SPA. **React + Vite + TypeScript.**
   Note: scaffolded on **.NET 10** (installed LTS) rather than net8.0.
 - Data access: **EF Core** (migrations, schema-per-service) **+ Dapper later** for money-ledger hot paths
 - Validation: FluentValidation · Background: Hosted `BackgroundService` (+ Hangfire if needed)
-- Money: integer-only in **bani** (`long`), never floats (dev-doc non-negotiable)
+- Money: integer-only in **EUR cents** (`long`), never floats (dev-doc non-negotiable)
 
 ### D4 — Data model ✅
 Postgres, schema-per-service. Core entities:
@@ -323,6 +323,6 @@ Tracked here so they are resolved deliberately rather than by whoever writes the
 
 | # | Decision | Status |
 |---|---|---|
-| 1 | **Storage currency.** Product docs quote EUR; `Money` documents itself as RON *bani*. Romanian invoicing (e-Factura) and PFA payouts are RON; brand budgets are quoted in EUR. | **Open — blocks payout code.** Pick one storage currency, record it here, and align `Money`'s doc comment with it. |
+| 1 | **Storage currency.** Product docs quote EUR; brand budgets are quoted in EUR. Romanian invoicing (e-Factura) and PFA payouts are RON. | **Resolved (2026-08-04): store EUR minor units (cents).** `Money` holds integer EUR cents; the brand UI already works in minor units. RON payout/e-Factura conversion is deferred to a payout-currency layer when payouts are built. |
 | 2 | **Post capture: pasted link vs. automatic detection.** Both use the same `video.list` access; the difference is UX friction versus detection latency. | Open — decide during build; not blocking. |
 | 3 | **Clip source for the AI portrait.** The API returns metadata and cover images, never video files. Working assumption: the creator uploads 3–5 clips at onboarding, and the portrait is enriched from campaign data over time. | Assumption in force — validate in the first two weeks. |

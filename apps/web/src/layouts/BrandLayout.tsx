@@ -4,7 +4,7 @@ import { SurfaceBackdrop } from "../components/SurfaceBackdrop";
 import { cn } from "../lib/cn";
 import { t } from "@vira/core";
 import { useSession } from "../lib/session";
-import { brandSummary } from "@vira/core";
+import { useMe } from "../lib/queries";
 
 const navItems = [
   { to: "/brand", icon: "campaign", label: t.nav.campaigns, end: true },
@@ -20,6 +20,8 @@ const navItems = [
 export function BrandLayout() {
   const navigate = useNavigate();
   const signOut = useSession((state) => state.signOut);
+  const { data: me } = useMe();
+  const displayName = me?.companyName || me?.email || t.roles.brandManager;
 
   function leave() {
     signOut();
@@ -36,12 +38,12 @@ export function BrandLayout() {
           <div className="flex items-center gap-3">
             <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5">
               <span className="font-display text-[14px] font-semibold text-on-surface">
-                {brandSummary.managerName.charAt(0)}
+                {displayName.charAt(0).toUpperCase()}
               </span>
             </div>
             <div className="hidden min-w-0 sm:block">
               <p className="truncate font-display text-[15px] font-bold leading-tight text-on-surface">
-                {brandSummary.managerName}
+                {displayName}
               </p>
               <p className="label-caps text-[9px] leading-tight">{t.roles.brandManager}</p>
             </div>

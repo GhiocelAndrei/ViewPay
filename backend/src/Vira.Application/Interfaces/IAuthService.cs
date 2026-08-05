@@ -1,0 +1,24 @@
+using Vira.Abstractions.DTOs;
+using Vira.Abstractions.Models.Identity;
+
+namespace Vira.Application.Interfaces;
+
+/// <summary>Resolved session identity used by the auth handler to build the ClaimsPrincipal.</summary>
+public record SessionInfo(Guid AccountId, AccountType Type, Guid? BusinessId);
+
+/// <summary>
+/// Firebase-backed authentication + server-side sessions. Business logic depends on this; the
+/// implementation lives in Application and owns the DbContext + FirebaseAdmin calls.
+/// </summary>
+public interface IAuthService
+{
+    /// <summary>Verify a Firebase ID token, find-or-create the Business account, and open a session.</summary>
+    Task<AuthResultDto> AuthenticateWithFirebaseAsync(string idToken, CancellationToken ct = default);
+
+    /// <summary>Validate a session (exists + not expired) and return its identity, else null.</summary>
+    Task<SessionInfo?> ResolveSessionAsync(Guid sessionId, CancellationToken ct = default);
+
+    Task<MeDto?> GetMeAsync(Guid accountId, CancellationToken ct = default);
+
+    Task LogoutAsync(Guid sessionId, CancellationToken ct = default);
+}
