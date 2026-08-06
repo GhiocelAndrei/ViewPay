@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { BrandLayout } from "./layouts/BrandLayout";
 import { CreatorLayout } from "./layouts/CreatorLayout";
 import { GuestOnly, RequireRole } from "./routes/guards";
+import { useMe } from "./lib/queries";
+import { useSession } from "./lib/session";
 import AnalyticsPage from "./features/business/AnalyticsPage";
 import ApprovalQueue from "./features/business/ApprovalQueue";
 import AssistantPanel from "./features/assistant/AssistantPanel";
@@ -12,10 +15,28 @@ import EarningsPage from "./features/earnings/EarningsPage";
 import FeedPage from "./features/feed/FeedPage";
 import LandingPage from "./features/marketing/LandingPage";
 import NewCampaignPage from "./features/business/NewCampaignPage";
+import BrandOnboardingPage from "./features/business/BrandOnboardingPage";
 import PortraitPage from "./features/portrait/PortraitPage";
 import SignInPage from "./features/auth/SignInPage";
 import CreatorSignInPage from "./features/auth/CreatorSignInPage";
 import BrandAccountPage from "./features/auth/BrandAccountPage";
+
+/** Confirms the session with the gateway on boot and hydrates the presentation store. */
+function SessionBootstrap() {
+  const { data, isSuccess } = useMe();
+  const hydrate = useSession((s) => s.hydrate);
+  useEffect(() => {
+    if (isSuccess) hydrate(data ?? null);
+  }, [isSuccess, data, hydrate]);
+  return null;
+}
+
+/** Brand chrome, gated on completed onboarding — an un-onboarded brand is sent to the form. */
+function BrandArea() {
+  const onboardingComplete = useSession((s) => s.onboardingComplete);
+  if (!onboardingComplete) return <Navigate to="/brand/onboarding" replace />;
+  return <BrandLayout />;
+}
 
 /**
  * One app, three audiences (BUILD_PLAN D13):
@@ -34,6 +55,7 @@ import BrandAccountPage from "./features/auth/BrandAccountPage";
 export default function App() {
   return (
     <Router>
+      <SessionBootstrap />
       <Routes>
         {/* Public */}
         <Route
@@ -87,11 +109,21 @@ export default function App() {
           <Route path="/asistent" element={<AssistantPanel />} />
         </Route>
 
-        {/* Brand */}
+        {/* Brand onboarding — brand-guarded but outside the onboarding gate (else it'd loop). */}
+        <Route
+          path="/brand/onboarding"
+          element={
+            <RequireRole role="brand">
+              <BrandOnboardingPage />
+            </RequireRole>
+          }
+        />
+
+        {/* Brand app — requires the brand role AND completed onboarding. */}
         <Route
           element={
             <RequireRole role="brand">
-              <BrandLayout />
+              <BrandArea />
             </RequireRole>
           }
         >

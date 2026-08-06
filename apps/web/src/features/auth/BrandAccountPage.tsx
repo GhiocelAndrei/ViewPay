@@ -5,6 +5,8 @@ import { cn } from "../../lib/cn";
 import { t } from "@vira/core";
 import { AuthShell } from "./AuthShell";
 import { homeFor, useSession } from "../../lib/session";
+import { loginBrand, registerBrand } from "../../lib/auth";
+import { isFirebaseConfigured } from "../../lib/firebase";
 
 type Mode = "register" | "login";
 
@@ -33,7 +35,7 @@ const inputClass = cn(
 export default function BrandAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const signInAsBrand = useSession((state) => state.signInAsBrand);
+  const hydrate = useSession((state) => state.hydrate);
 
   const state = location.state as { from?: string; mode?: Mode } | null;
   const [mode, setMode] = useState<Mode>(state?.mode ?? "register");
@@ -43,6 +45,8 @@ export default function BrandAccountPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const registering = mode === "register";
 
@@ -63,16 +67,41 @@ export default function BrandAccountPage() {
     return Object.keys(next).length === 0;
   }
 
-  function submit(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
+    setFormError(null);
     if (!validate()) return;
-    signInAsBrand();
-    navigate(state?.from ?? homeFor("brand"), { replace: true });
+    if (!isFirebaseConfigured) {
+      setFormError(t.brandAuth.errors.notConfigured);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const me = registering
+        ? await registerBrand(email.trim(), password)
+        : await loginBrand(email.trim(), password);
+      hydrate(me);
+      // New accounts always land on onboarding (prefilled with the business name); returning
+      // managers go to their dashboard (or wherever they were headed).
+      if (registering) {
+        navigate("/brand/onboarding", { replace: true, state: { companyName: businessName.trim() } });
+      } else {
+        navigate(me.onboardingComplete ? (state?.from ?? homeFor("brand")) : "/brand/onboarding", {
+          replace: true,
+        });
+      }
+    } catch (err) {
+      setFormError(mapAuthError(err));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function switchMode(next: Mode) {
     setMode(next);
     setErrors({});
+    setFormError(null);
   }
 
   return (
@@ -127,15 +156,23 @@ export default function BrandAccountPage() {
           />
         </Field>
 
+        {formError && <p className="text-[13px] text-error">{formError}</p>}
+
         <button
           type="submit"
+          disabled={submitting}
           className={cn(
             "mt-2 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5",
             "bg-business font-body text-[15px] font-bold text-on-business",
             "shadow-business-glow transition-transform hover:bg-business/90 active:scale-[0.99]",
+            "disabled:cursor-not-allowed disabled:opacity-60",
           )}
         >
-          {registering ? t.brandAuth.submitRegister : t.brandAuth.submitLogin}
+          {submitting
+            ? t.brandAuth.submitting
+            : registering
+              ? t.brandAuth.submitRegister
+              : t.brandAuth.submitLogin}
           <Icon name="arrow_forward" size={18} />
         </button>
       </form>
@@ -166,6 +203,23 @@ export default function BrandAccountPage() {
       </Link>
     </AuthShell>
   );
+}
+
+/** Map Firebase auth error codes to a Romanian message; fall back to a generic one. */
+function mapAuthError(err: unknown): string {
+  const code = typeof err === "object" && err !== null && "code" in err ? String((err as { code: unknown }).code) : "";
+  switch (code) {
+    case "auth/email-already-in-use":
+      return t.brandAuth.errors.emailInUse;
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      return t.brandAuth.errors.invalidCredentials;
+    case "auth/weak-password":
+      return t.brandAuth.errors.password;
+    default:
+      return t.brandAuth.errors.generic;
+  }
 }
 
 function Field({

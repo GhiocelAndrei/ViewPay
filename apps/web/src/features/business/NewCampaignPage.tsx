@@ -1,9 +1,11 @@
 import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Icon } from "../../components/Icon";
 import { Button, Card, Chip } from "../../components/ui";
 import { cn } from "../../lib/cn";
-import { useBrandCampaigns } from "../../lib/brandCampaigns";
+import { postJson } from "../../lib/api";
+import type { CampaignObjective } from "../../lib/types";
 import { t } from "@vira/core";
 import {
   AVERAGE_VIEWS_PER_CREATOR,
@@ -51,10 +53,21 @@ const inputClass = cn(
  * creator counts are estimates from `@vira/core/estimates` and are labelled as
  * such — nothing here derives a payable amount.
  */
+/** Wizard objective ids are lowercase; the API enum is PascalCase. */
+const OBJECTIVE_MAP: Record<CampaignObjectiveId, CampaignObjective> = {
+  awareness: "Awareness",
+  visits: "Visits",
+  offer: "Offer",
+  launch: "Launch",
+  community: "Community",
+};
+
 export default function NewCampaignPage() {
   const navigate = useNavigate();
-  const addCampaign = useBrandCampaigns((state) => state.add);
+  const queryClient = useQueryClient();
 
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [objectiveId, setObjectiveId] = useState<CampaignObjectiveId | null>(null);
   const [budgetMinor, setBudgetMinor] = useState(CAMPAIGN_MIN_BUDGET_MINOR);
@@ -95,24 +108,30 @@ export default function NewCampaignPage() {
     ...extraRequirements,
   ];
 
-  function submit() {
-    addCampaign({
-      id: `cmp-${Date.now()}`,
-      name: name.trim(),
-      startDate: new Intl.DateTimeFormat("ro-RO", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }).format(new Date()),
-      status: "draft",
-      budgetMinor,
-      spentMinor: 0,
-      views: 0,
-      // Nothing measured yet, so there is no cost per mille to report. Not the
-      // same as "zero cost" — the analytics screen renders it as "—".
-      effectiveCpmMinor: 0,
-    });
-    navigate("/brand", { state: { created: name.trim() } });
+  async function submit() {
+    if (!objectiveId) return;
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await postJson("/brand/campaigns", {
+        title: name.trim(),
+        objective: OBJECTIVE_MAP[objectiveId],
+        budgetMinor, // integer minor units all the way through — no euro↔cent conversion
+        hashtags,
+        mention: mention.trim() || null,
+        durationPreset: clipDurationPresets.find((p) => p.id === durationId)?.label ?? "",
+        requirements: extraRequirements,
+        productPlacement,
+        minFollowerThreshold: 0,
+        extraRequirements: "",
+        message: "",
+      });
+      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
+      navigate("/brand", { state: { created: name.trim() } });
+    } catch {
+      setSubmitError(t.newCampaign.createError);
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -453,11 +472,13 @@ export default function NewCampaignPage() {
             <Icon name="arrow_forward" size={18} />
           </Button>
         ) : (
-          <Button onClick={submit} icon="check">
-            {t.newCampaign.create}
+          <Button onClick={submit} icon="check" disabled={submitting}>
+            {submitting ? t.newCampaign.creating : t.newCampaign.create}
           </Button>
         )}
       </div>
+
+      {submitError && <p className="mt-3 text-right text-[13px] text-error">{submitError}</p>}
     </div>
   );
 }
