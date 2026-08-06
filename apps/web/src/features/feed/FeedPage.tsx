@@ -154,7 +154,7 @@ export default function FeedPage() {
 
       {undoFor && (
         <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex justify-center px-4">
-          <div className="pointer-events-auto flex max-w-md items-center gap-4 rounded-lg border border-white/10 bg-surface-container-high px-4 py-3 shadow-primary-glow">
+          <div className="pointer-events-auto flex max-w-md items-center gap-4 rounded-lg border border-white/10 bg-surface-container-high px-4 py-3 shadow-creator-glow">
             <div className="min-w-0">
               <p className="truncate text-[13px] font-semibold text-on-surface">
                 {t.feed.dismissed(undoFor.brandName)}
@@ -164,7 +164,7 @@ export default function FeedPage() {
             <button
               type="button"
               onClick={onUndo}
-              className="shrink-0 font-body text-[13px] font-bold text-primary transition-opacity hover:opacity-80"
+              className="shrink-0 font-body text-[13px] font-bold text-creator transition-opacity hover:opacity-80"
             >
               {t.feed.undo}
             </button>
@@ -314,7 +314,7 @@ function EmptyFeed({ onRestore }: { onRestore: () => void }) {
       <button
         type="button"
         onClick={onRestore}
-        className="mt-6 rounded border border-primary/50 px-4 py-2.5 font-body text-[13px] font-semibold text-primary transition-colors hover:bg-primary/10"
+        className="mt-6 rounded border border-creator/50 px-4 py-2.5 font-body text-[13px] font-semibold text-creator transition-colors hover:bg-creator/10"
       >
         {t.feed.resetDismissed}
       </button>
@@ -422,16 +422,15 @@ function CampaignSlide({
 
                 {/* The percentage is the tap target for its own justification —
                     that is where the question occurs to the reader. */}
+                {/* Violet, not the campaign accent: a match is a creator measured
+                    against a campaign, so it belongs to neither side alone. */}
                 <button
                   type="button"
                   onClick={() => setShowWhy(true)}
                   aria-label={t.feed.whyMatch}
                   className="flex shrink-0 flex-col items-center transition-opacity hover:opacity-80"
                 >
-                  <span
-                    className="numeric text-[15px] font-bold"
-                    style={{ color: campaign.accent }}
-                  >
+                  <span className="numeric text-[15px] font-bold text-primary">
                     {campaign.matchPercent}%
                   </span>
                   <span className="label-caps flex items-center gap-0.5 text-[8px] text-white/40">
@@ -514,12 +513,11 @@ function CampaignSlide({
           </div>
 
           {/* Why this campaign is here. Slides over the card rather than
-              navigating away — the answer is context, not a destination. */}
+              navigating away — the answer is context, not a destination.
+              Violet throughout: this is AI output, never the campaign's colour. */}
           {showWhy && (
             <div className="absolute inset-0 z-20 flex animate-fade-up flex-col justify-end bg-background/92 p-6 backdrop-blur-sm">
-              <p className="label-caps" style={{ color: campaign.accent }}>
-                {t.feed.whyMatchTitle}
-              </p>
+              <p className="label-caps text-primary">{t.feed.whyMatchTitle}</p>
 
               <ul className="mt-4 flex flex-col gap-3">
                 {campaign.matchReasons.map((reason) => (
@@ -527,8 +525,7 @@ function CampaignSlide({
                     <Icon
                       name="check_circle"
                       size={17}
-                      className="mt-0.5 shrink-0"
-                      style={{ color: campaign.accent }}
+                      className="mt-0.5 shrink-0 text-primary"
                     />
                     <span className="text-[14px] leading-relaxed text-on-surface">
                       {reason.text}
@@ -566,7 +563,7 @@ function CampaignSlide({
               className={cn(
                 "flex flex-col items-center gap-1 transition-colors",
                 action.highlight
-                  ? "text-primary"
+                  ? "text-creator"
                   : "text-on-surface-variant hover:text-on-surface",
               )}
             >

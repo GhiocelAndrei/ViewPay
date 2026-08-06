@@ -76,7 +76,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
             Blocată
           </Chip>
         ) : (
-          <Chip tone={campaign.match === "strong" ? "mint" : "primary"} icon="check_circle">
+          <Chip tone={campaign.match === "strong" ? "mint" : "creator"} icon="check_circle">
             {campaign.match === "strong" ? t.campaigns.strongMatch : t.campaigns.worthTrying}
           </Chip>
         )}
@@ -97,7 +97,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
       <div className="mt-5 grid grid-cols-2 gap-4 rounded-md border border-white/5 bg-surface-container-lowest/60 p-4">
         <div>
           <p className="label-caps text-[10px]">{t.campaigns.payoutRate}</p>
-          <p className="numeric mt-1 text-[18px] font-semibold text-primary">
+          <p className="numeric mt-1 text-[18px] font-semibold text-creator">
             {formatMoney(campaign.ratePerMilleMinor)}
             <span className="ml-1 font-body text-[11px] font-normal text-on-surface-variant">
               / 1.000
@@ -172,7 +172,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
             <p className="numeric mt-1 text-[13px] text-on-surface">{campaign.slotsLeft}</p>
           </div>
         </div>
-        <Button variant={locked ? "subtle" : "primary"} disabled={locked}>
+        <Button variant={locked ? "subtle" : "creator"} disabled={locked}>
           {t.campaigns.apply}
         </Button>
       </div>

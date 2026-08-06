@@ -7,7 +7,12 @@ import { Icon } from "./Icon";
 /* -------------------------------------------------------------------------- */
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "ghost" | "subtle";
+  /**
+   * `primary` is the shared violet — use it only where both audiences are in
+   * the room (payout, AI, statistics). One-sided screens take `business` or
+   * `creator`, coloured by whose action the button performs.
+   */
+  variant?: "primary" | "business" | "creator" | "ghost" | "subtle";
   size?: "sm" | "md";
   icon?: string;
 }
@@ -28,6 +33,10 @@ export function Button({
         size === "sm" ? "px-3 py-1.5 text-sm" : "px-4 py-2.5 text-sm",
         variant === "primary" &&
           "bg-primary text-on-primary shadow-primary-glow hover:bg-primary/90",
+        variant === "business" &&
+          "bg-business-container text-on-business shadow-business-glow hover:bg-business",
+        variant === "creator" &&
+          "bg-creator-container text-on-creator shadow-creator-glow hover:bg-creator",
         variant === "ghost" &&
           "border border-primary/60 text-primary hover:bg-primary/10",
         variant === "subtle" &&
@@ -95,11 +104,13 @@ export function CardHeader({
 /* Chip                                                                        */
 /* -------------------------------------------------------------------------- */
 
-type ChipTone = "neutral" | "primary" | "mint" | "amber" | "error";
+type ChipTone = "neutral" | "primary" | "business" | "creator" | "mint" | "amber" | "error";
 
 const chipTones: Record<ChipTone, string> = {
   neutral: "bg-white/5 text-on-surface-variant border-white/10",
   primary: "bg-primary/10 text-primary border-primary/20",
+  business: "bg-business/10 text-business border-business/20",
+  creator: "bg-creator/10 text-creator border-creator/20",
   mint: "bg-mint/10 text-mint border-mint/20",
   amber: "bg-amber/10 text-amber border-amber/20",
   error: "bg-error/10 text-error border-error/20",

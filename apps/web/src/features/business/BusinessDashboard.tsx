@@ -13,7 +13,7 @@ import { useCampaigns, useMe } from "../../lib/queries";
 import { t } from "@vira/core";
 import { formatMoney, formatViews } from "@vira/core";
 
-const statusTone = { active: "mint", draft: "neutral", closed: "primary" } as const;
+const statusTone = { active: "mint", draft: "neutral", closed: "business" } as const;
 
 /**
  * Brand dashboard.
@@ -56,7 +56,7 @@ export default function BusinessDashboard() {
         title={t.brand.welcome(me?.companyName ?? me?.email ?? "")}
         subtitle={t.brand.subtitle}
         action={
-          <Button icon="add_circle" variant="primary" onClick={() => navigate("/brand/campanii/nou")}>
+          <Button icon="add_circle" variant="business" onClick={() => navigate("/brand/campanii/nou")}>
             {t.brand.newCampaign}
           </Button>
         }
@@ -105,7 +105,7 @@ export default function BusinessDashboard() {
               </span>
             </p>
           </div>
-          <Chip tone="primary">{budgetPercent}%</Chip>
+          <Chip tone="business">{budgetPercent}%</Chip>
         </div>
         <ProgressBar percent={budgetPercent} className="mt-5" />
         <p className="mt-3 text-[12px] text-on-surface-variant/70">
@@ -128,7 +128,7 @@ export default function BusinessDashboard() {
             <Button
               className="mt-5"
               icon="add_circle"
-              variant="primary"
+              variant="business"
               onClick={() => navigate("/brand/campanii/nou")}
             >
               {t.brand.newCampaign}

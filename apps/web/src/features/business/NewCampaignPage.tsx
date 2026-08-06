@@ -35,7 +35,7 @@ const steps = [
 const inputClass = cn(
   "w-full rounded border border-white/10 bg-surface-container-lowest px-4 py-3",
   "font-body text-[15px] text-on-surface placeholder:text-on-surface-variant/40",
-  "outline-none transition-colors focus:border-primary/60",
+  "outline-none transition-colors focus:border-business/60",
 );
 
 /**
@@ -166,14 +166,14 @@ export default function NewCampaignPage() {
                     className={cn(
                       "flex items-start gap-4 rounded-lg border p-5 text-left transition-colors",
                       selected
-                        ? "border-primary/60 bg-primary/10"
+                        ? "border-business/60 bg-business/10"
                         : "border-white/5 bg-surface-container-low hover:border-white/15",
                     )}
                   >
                     <span
                       className={cn(
                         "grid h-10 w-10 shrink-0 place-items-center rounded-full",
-                        selected ? "bg-primary/20 text-primary" : "bg-white/5 text-on-surface-variant",
+                        selected ? "bg-business/20 text-business" : "bg-white/5 text-on-surface-variant",
                       )}
                     >
                       <Icon name={item.icon} size={20} filled={selected} />
@@ -189,7 +189,7 @@ export default function NewCampaignPage() {
                         {formatRatePerMille(item.ratePerMilleMinor)}
                       </span>
                     </span>
-                    {selected && <Icon name="check_circle" size={20} className="text-primary" filled />}
+                    {selected && <Icon name="check_circle" size={20} className="text-business" filled />}
                   </button>
                 );
               })}
@@ -207,7 +207,7 @@ export default function NewCampaignPage() {
                     {formatMoney(budgetMinor, { compactZeroCents: true })}
                   </p>
                 </div>
-                <Chip tone="primary">{formatRatePerMille(ratePerMilleMinor)}</Chip>
+                <Chip tone="business">{formatRatePerMille(ratePerMilleMinor)}</Chip>
               </div>
 
               {/* Value, min, max and step are all minor units — the slider never sees euros. */}
@@ -219,7 +219,7 @@ export default function NewCampaignPage() {
                 value={budgetMinor}
                 onChange={(event) => setBudgetMinor(Number(event.target.value))}
                 aria-label={t.newCampaign.budgetLabel}
-                className="mt-6 h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-primary"
+                className="mt-6 h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-business"
               />
 
               <div className="mt-4 flex flex-wrap gap-2">
@@ -231,7 +231,7 @@ export default function NewCampaignPage() {
                     className={cn(
                       "numeric rounded-full border px-3 py-1 text-[12px] font-semibold transition-colors",
                       preset === budgetMinor
-                        ? "border-primary/40 bg-primary/10 text-primary"
+                        ? "border-business/40 bg-business/10 text-business"
                         : "border-white/10 bg-white/5 text-on-surface-variant hover:border-white/20",
                     )}
                   >
@@ -247,8 +247,8 @@ export default function NewCampaignPage() {
               </p>
             </Card>
 
-            <Card className="mt-4 border-primary/20 bg-primary/5 p-6">
-              <p className="label-caps text-primary">{t.newCampaign.estimateTitle}</p>
+            <Card className="mt-4 border-business/20 bg-business/5 p-6">
+              <p className="label-caps text-business">{t.newCampaign.estimateTitle}</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div>
                   <p className="numeric text-[32px] font-semibold leading-none text-on-surface">
@@ -344,7 +344,7 @@ export default function NewCampaignPage() {
                       className={cn(
                         "rounded-full border px-4 py-2 font-body text-[13px] font-semibold transition-colors",
                         preset.id === durationId
-                          ? "border-primary/40 bg-primary/10 text-primary"
+                          ? "border-business/40 bg-business/10 text-business"
                           : "border-white/10 bg-white/5 text-on-surface-variant hover:border-white/20",
                       )}
                     >
@@ -384,7 +384,7 @@ export default function NewCampaignPage() {
                   <span
                     className={cn(
                       "relative h-6 w-11 shrink-0 rounded-full transition-colors",
-                      productPlacement ? "bg-primary" : "bg-white/10",
+                      productPlacement ? "bg-business" : "bg-white/10",
                     )}
                   >
                     <span
@@ -495,13 +495,13 @@ function StepBar({ current }: { current: number }) {
             <div
               className={cn(
                 "h-1 rounded-full transition-colors",
-                index <= current ? "bg-primary" : "bg-white/10",
+                index <= current ? "bg-business" : "bg-white/10",
               )}
             />
             <p
               className={cn(
                 "mt-2 hidden text-[11px] font-semibold sm:block",
-                index === current ? "text-primary" : "text-on-surface-variant/50",
+                index === current ? "text-business" : "text-on-surface-variant/50",
               )}
             >
               {label}

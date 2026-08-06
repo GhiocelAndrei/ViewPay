@@ -13,7 +13,7 @@ type Mode = "register" | "login";
 const inputClass = cn(
   "w-full rounded border border-white/10 bg-surface-container-lowest px-4 py-3",
   "font-body text-[15px] text-on-surface placeholder:text-on-surface-variant/40",
-  "outline-none transition-colors focus:border-primary/60",
+  "outline-none transition-colors focus:border-business/60",
 );
 
 /**
@@ -163,8 +163,8 @@ export default function BrandAccountPage() {
           disabled={submitting}
           className={cn(
             "mt-2 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5",
-            "bg-primary font-body text-[15px] font-bold text-on-primary",
-            "shadow-primary-glow transition-transform hover:bg-primary/90 active:scale-[0.99]",
+            "bg-business font-body text-[15px] font-bold text-on-business",
+            "shadow-business-glow transition-transform hover:bg-business/90 active:scale-[0.99]",
             "disabled:cursor-not-allowed disabled:opacity-60",
           )}
         >
@@ -182,7 +182,7 @@ export default function BrandAccountPage() {
         <button
           type="button"
           onClick={() => switchMode(registering ? "login" : "register")}
-          className="font-semibold text-primary transition-opacity hover:opacity-80"
+          className="font-semibold text-business transition-opacity hover:opacity-80"
         >
           {registering ? t.brandAuth.toLoginAction : t.brandAuth.toRegisterAction}
         </button>

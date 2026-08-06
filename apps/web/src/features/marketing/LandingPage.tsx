@@ -83,12 +83,14 @@ function Hero() {
         {/* Two audiences, two different doors — a creator signs in with TikTok
             and never makes an account here; a business registers one. */}
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          {/* Each door wears its own side's colour — the first thing a visitor
+              learns about the system, before any of it is explained. */}
           <Link
             to="/intra/creator"
             className={cn(
               "inline-flex w-full items-center justify-center gap-2 rounded px-6 py-3.5 sm:w-auto",
-              "bg-primary font-body text-[15px] font-bold text-on-primary",
-              "shadow-primary-glow transition-transform hover:bg-primary/90 active:scale-[0.98]",
+              "bg-creator-container font-body text-[15px] font-bold text-on-creator",
+              "shadow-creator-glow transition-transform hover:bg-creator active:scale-[0.98]",
             )}
           >
             <Icon name="music_note" size={20} />
@@ -97,8 +99,9 @@ function Hero() {
           <Link
             to="/intra/afacere"
             className={cn(
-              "inline-flex w-full items-center justify-center gap-2 rounded border border-white/10 px-6 py-3.5 sm:w-auto",
-              "font-body text-[15px] text-on-surface transition-colors hover:border-white/25",
+              "inline-flex w-full items-center justify-center gap-2 rounded border px-6 py-3.5 sm:w-auto",
+              "border-business/50 font-body text-[15px] font-semibold text-business",
+              "transition-colors hover:bg-business/10",
             )}
           >
             <Icon name="storefront" size={20} />
@@ -164,10 +167,23 @@ function ForWho() {
             className="flex flex-col rounded-lg border border-white/5 bg-surface-container-low p-7 transition-colors hover:border-white/[0.12]"
           >
             <div className="flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-md border border-primary/20 bg-primary/10">
-                <Icon name={audience.icon} size={22} className="text-primary" />
+              <div
+                className={cn(
+                  "grid h-11 w-11 place-items-center rounded-md border",
+                  index === 0
+                    ? "border-business/20 bg-business/10"
+                    : "border-creator/20 bg-creator/10",
+                )}
+              >
+                <Icon
+                  name={audience.icon}
+                  size={22}
+                  className={index === 0 ? "text-business" : "text-creator"}
+                />
               </div>
-              <p className="label-caps text-primary">{audience.eyebrow}</p>
+              <p className={cn("label-caps", index === 0 ? "text-business" : "text-creator")}>
+                {audience.eyebrow}
+              </p>
             </div>
 
             <h3 className="mt-6 font-display text-[24px] font-semibold leading-snug text-on-surface">
@@ -186,8 +202,11 @@ function ForWho() {
             <Link
               to={index === 0 ? "/intra/afacere" : "/intra/creator"}
               className={cn(
-                "mt-7 inline-flex items-center gap-2 self-start rounded border border-primary/50 px-4 py-2.5",
-                "font-body text-[13px] font-semibold text-primary transition-colors hover:bg-primary/10",
+                "mt-7 inline-flex items-center gap-2 self-start rounded border px-4 py-2.5",
+                "font-body text-[13px] font-semibold transition-colors",
+                index === 0
+                  ? "border-business/50 text-business hover:bg-business/10"
+                  : "border-creator/50 text-creator hover:bg-creator/10",
               )}
             >
               {t.landing.startHere}
