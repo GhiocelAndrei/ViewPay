@@ -18,8 +18,8 @@ export default function PortraitPage() {
     <div className="mx-auto max-w-container px-6 py-10 md:px-12">
       {/* Identity */}
       <div className="flex flex-wrap items-center gap-6">
-        <div className="grid h-24 w-24 place-items-center rounded-full border border-primary/20 bg-primary/10">
-          <span className="font-display text-[32px] font-bold text-primary">
+        <div className="grid h-24 w-24 place-items-center rounded-full border border-creator/20 bg-creator/10">
+          <span className="font-display text-[32px] font-bold text-creator">
             {currentCreator.displayName.charAt(0)}
           </span>
         </div>
@@ -29,7 +29,7 @@ export default function PortraitPage() {
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <span className="text-on-surface-variant">{currentCreator.handle}</span>
-            <Chip tone="primary" icon={currentCreator.verified ? "verified" : undefined}>
+            <Chip tone="creator" icon={currentCreator.verified ? "verified" : undefined}>
               <span className="numeric">{formatCompactNumber(currentCreator.followerCount)}</span>
               <span className="ml-1 font-normal">{t.portrait.followers}</span>
             </Chip>
@@ -37,7 +37,7 @@ export default function PortraitPage() {
         </div>
 
         <div className="ml-auto flex gap-2">
-          <Button variant="primary" icon="face" size="sm">
+          <Button variant="creator" icon="face" size="sm">
             {t.portrait.tabPortrait}
           </Button>
           <Button variant="subtle" icon="movie" size="sm">
@@ -108,10 +108,10 @@ export default function PortraitPage() {
                 <div
                   className={cn(
                     "grid h-12 w-9 shrink-0 place-items-center rounded border border-white/10",
-                    "bg-gradient-to-b from-primary/20 to-transparent",
+                    "bg-gradient-to-b from-creator/20 to-transparent",
                   )}
                 >
-                  <Icon name="play_arrow" size={16} className="text-primary" />
+                  <Icon name="play_arrow" size={16} className="text-creator" />
                 </div>
                 <div className="min-w-0">
                   <p className="truncate font-body text-[12px] font-semibold text-on-surface">
@@ -123,7 +123,7 @@ export default function PortraitPage() {
                 </div>
                 <button
                   type="button"
-                  className="ml-auto shrink-0 text-on-surface-variant transition-colors hover:text-primary"
+                  className="ml-auto shrink-0 text-on-surface-variant transition-colors hover:text-creator"
                   aria-label={t.portrait.seeClip}
                 >
                   <Icon name="arrow_outward" size={16} />
@@ -135,12 +135,12 @@ export default function PortraitPage() {
       </section>
 
       {/* Growth tip */}
-      <Card className="mt-6 flex items-start gap-4 border-primary/20 bg-primary/5 p-6">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/15">
-          <Icon name="lightbulb" size={20} className="text-primary" />
+      <Card className="mt-6 flex items-start gap-4 border-creator/20 bg-creator/5 p-6">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-creator/15">
+          <Icon name="lightbulb" size={20} className="text-creator" />
         </div>
         <div>
-          <p className="label-caps text-primary">{t.portrait.growthTip}</p>
+          <p className="label-caps text-creator">{t.portrait.growthTip}</p>
           <p className="mt-2 max-w-2xl text-body-md text-on-surface">{portrait.growthTip}</p>
         </div>
       </Card>

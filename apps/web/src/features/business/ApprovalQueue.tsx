@@ -131,7 +131,7 @@ export default function ApprovalQueue() {
                   className={cn(
                     "rounded-lg border p-4 text-left transition-colors",
                     active
-                      ? "border-primary/50 bg-primary/10 lg:border-primary/50"
+                      ? "border-business/50 bg-business/10 lg:border-business/50"
                       : "border-white/5 bg-surface-container-low hover:border-white/15",
                   )}
                 >
@@ -208,7 +208,7 @@ export default function ApprovalQueue() {
                     </p>
 
                     <div className="mt-4 flex flex-wrap gap-2">
-                      <Chip tone="primary" icon="campaign">
+                      <Chip tone="business" icon="campaign">
                         {selected.campaignName}
                       </Chip>
                       <Chip icon="schedule">
@@ -288,7 +288,7 @@ export default function ApprovalQueue() {
                             className={cn(
                               "rounded-full border px-3 py-1.5 font-body text-[12px] font-semibold transition-colors",
                               reasonId === id
-                                ? "border-primary/40 bg-primary/10 text-primary"
+                                ? "border-business/40 bg-business/10 text-business"
                                 : "border-white/10 bg-white/5 text-on-surface-variant hover:border-white/20",
                             )}
                           >
@@ -307,7 +307,7 @@ export default function ApprovalQueue() {
                           "w-full resize-y rounded border border-white/10 bg-surface-container-lowest px-4 py-3",
                           "font-body text-[14px] leading-6 text-on-surface",
                           "placeholder:text-on-surface-variant/40",
-                          "outline-none transition-colors focus:border-primary/60",
+                          "outline-none transition-colors focus:border-business/60",
                         )}
                       />
                       {!canConfirmReject && (

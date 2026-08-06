@@ -59,7 +59,7 @@ export function BrandLayout() {
                   cn(
                     "flex items-center gap-2 rounded px-3 py-2 font-display text-[13px] transition-colors",
                     isActive
-                      ? "bg-primary/10 font-semibold text-primary"
+                      ? "bg-business/10 font-semibold text-business"
                       : "text-on-surface-variant hover:bg-white/5 hover:text-on-surface",
                   )
                 }
@@ -119,7 +119,7 @@ export function BrandLayout() {
               className={({ isActive }) =>
                 cn(
                   "flex flex-1 flex-col items-center gap-1 py-3 transition-colors",
-                  isActive ? "text-primary" : "text-on-surface-variant",
+                  isActive ? "text-business" : "text-on-surface-variant",
                 )
               }
             >

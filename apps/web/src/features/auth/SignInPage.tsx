@@ -59,16 +59,16 @@ export default function SignInPage() {
             className={cn(
               "group flex items-start gap-4 rounded-lg border p-5 text-left transition-colors",
               door.primary
-                ? "border-primary/30 bg-primary/5 hover:border-primary/60 hover:bg-primary/10"
-                : "border-white/10 hover:border-white/25 hover:bg-white/[0.03]",
+                ? "border-creator/30 bg-creator/5 hover:border-creator/60 hover:bg-creator/10"
+                : "border-business/30 bg-business/5 hover:border-business/60 hover:bg-business/10",
             )}
           >
             <span
               className={cn(
                 "grid h-11 w-11 shrink-0 place-items-center rounded-full",
                 door.primary
-                  ? "bg-primary text-on-primary"
-                  : "border border-white/10 bg-white/5 text-on-surface-variant",
+                  ? "bg-creator-container text-on-creator"
+                  : "bg-business-container text-on-business",
               )}
             >
               <Icon name={door.icon} size={22} />
@@ -86,7 +86,7 @@ export default function SignInPage() {
               size={20}
               className={cn(
                 "mt-1 transition-transform group-hover:translate-x-1",
-                door.primary ? "text-primary" : "text-on-surface-variant",
+                door.primary ? "text-creator" : "text-business",
               )}
             />
           </button>

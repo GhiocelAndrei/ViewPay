@@ -133,7 +133,7 @@ export function CreatorLayout() {
               role="menu"
               className={cn(
                 "absolute left-0 top-full z-50 mt-2 w-72 animate-fade-up overflow-hidden rounded-lg",
-                "border border-white/10 bg-surface-container/95 shadow-primary-glow backdrop-blur-xl",
+                "border border-white/10 bg-surface-container/95 shadow-creator-glow backdrop-blur-xl",
               )}
             >
               <nav className="flex flex-col py-2">
@@ -146,7 +146,7 @@ export function CreatorLayout() {
                       cn(
                         "flex items-center gap-3 border-l-2 px-5 py-2.5 transition-colors",
                         isActive
-                          ? "border-primary bg-primary/10 font-semibold text-primary"
+                          ? "border-creator bg-creator/10 font-semibold text-creator"
                           : "border-transparent text-on-surface-variant hover:bg-white/5 hover:text-on-surface",
                       )
                     }
@@ -160,12 +160,12 @@ export function CreatorLayout() {
               {/* The number that should always be one glance away — now one tap. */}
               <div className="mx-3 mb-3 rounded-md border border-white/5 bg-surface-container-lowest/80 p-4">
                 <p className="label-caps text-[10px]">{t.feed.yourEarnings}</p>
-                <p className="numeric mt-1 text-[22px] font-semibold text-primary">
+                <p className="numeric mt-1 text-[22px] font-semibold text-creator">
                   {formatMoney(earnings.thisMonthMinor)}
                 </p>
                 <NavLink
                   to="/campanii"
-                  className="mt-2 inline-flex items-center gap-1 text-[11px] text-on-surface-variant transition-colors hover:text-primary"
+                  className="mt-2 inline-flex items-center gap-1 text-[11px] text-on-surface-variant transition-colors hover:text-creator"
                 >
                   {t.feed.firstCampaignCta}
                   <Icon name="arrow_forward" size={13} />

@@ -70,7 +70,7 @@ export default function CreatorsPage() {
                 className={cn(
                   "w-48 rounded border border-white/10 bg-surface-container-lowest py-2 pl-9 pr-3 sm:w-64",
                   "font-body text-[13px] text-on-surface placeholder:text-on-surface-variant/40",
-                  "outline-none transition-colors focus:border-primary/60",
+                  "outline-none transition-colors focus:border-business/60",
                 )}
               />
             </div>

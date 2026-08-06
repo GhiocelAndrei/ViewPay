@@ -4,6 +4,24 @@
  * `apps/web` feeds these into its Tailwind config; `apps/mobile` feeds the same
  * object into NativeWind. Keeping them here means a colour changes once, not
  * twice — and the two surfaces cannot drift apart silently.
+ *
+ * ── Two audiences, one meeting point ────────────────────────────────────────
+ *
+ * `primary` is not a neutral brand colour; it is what `business` and `creator`
+ * become when both parties are present. The three sit at 221° / 251° / 281° on
+ * the wheel, all at 100% saturation and 84% lightness, so none outweighs the
+ * others optically — and the outer two average back to the middle almost
+ * exactly (#AFC8FF + #E6AFFF → #CBBCFF against #CABEFF).
+ *
+ *   business — campaign creation, budget, approvals, the brand dashboard
+ *   creator  — portrait, feed, earnings, the creator's own profile
+ *   primary  — where both are in the room: the match score (a creator measured
+ *              against a campaign), the payout (the brand's money becoming the
+ *              creator's), statistics, and every AI output
+ *
+ * Tie-breaker when a surface belongs to one side but is acted on by the other:
+ * colour by whose ACTION it is, not whose object. Applying to a campaign is a
+ * creator action, so the button is `creator` even on a card describing a brand.
  */
 
 export const colors = {
@@ -25,6 +43,7 @@ export const colors = {
   outline: "#938ea1",
   "outline-variant": "#484555",
 
+  /** Shared ground — AI, statistics, match, cash-out. 11.2:1 on background, AAA. */
   primary: "#cabeff",
   "on-primary": "#31009a",
   "primary-container": "#947dff",
@@ -32,6 +51,18 @@ export const colors = {
   "inverse-primary": "#603ce2",
   "primary-fixed": "#e6deff",
   "primary-fixed-dim": "#cabeff",
+
+  /** The business side — 221°. 11.4:1 on background, AAA. */
+  business: "#AFC8FF",
+  "on-business": "#06153A",
+  "business-container": "#80A8FF",
+  "on-business-container": "#06153A",
+
+  /** The creator side — 281°. 10.9:1 on background, AAA. */
+  creator: "#E6AFFF",
+  "on-creator": "#2E0640",
+  "creator-container": "#D780FF",
+  "on-creator-container": "#2E0640",
 
   secondary: "#c7c6cb",
   "on-secondary": "#2f3035",

@@ -18,7 +18,7 @@ import { t } from "@vira/core";
 import { formatCompactNumber, formatMoney, formatViews } from "@vira/core";
 import { brandSummary, leaderboard } from "@vira/core";
 
-const statusTone = { active: "mint", draft: "neutral", closed: "primary" } as const;
+const statusTone = { active: "mint", draft: "neutral", closed: "business" } as const;
 
 /**
  * Brand dashboard.
@@ -48,7 +48,7 @@ export default function BusinessDashboard() {
         action={
           <Button
             icon="add_circle"
-            variant="primary"
+            variant="business"
             onClick={() => navigate("/brand/campanii/nou")}
           >
             {t.brand.newCampaign}
@@ -66,7 +66,7 @@ export default function BusinessDashboard() {
       )}
 
       {/* Live measurement — the one number on this screen that is not simulated. */}
-      <Card className="mt-8 border-primary/20 bg-primary/5 p-6">
+      <Card className="mt-8 border-business/20 bg-business/5 p-6">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <span className="relative flex h-3 w-3">
@@ -74,7 +74,7 @@ export default function BusinessDashboard() {
               <span className="relative inline-flex h-3 w-3 rounded-full bg-mint" />
             </span>
             <div>
-              <p className="label-caps text-primary">Măsurare live · clip de test</p>
+              <p className="label-caps text-business">Măsurare live · clip de test</p>
               <p className="mt-1 text-[13px] text-on-surface-variant">
                 Citit direct din API-ul oficial TikTok, la fiecare 30 de secunde.
               </p>
@@ -142,7 +142,7 @@ export default function BusinessDashboard() {
                 </span>
               </p>
             </div>
-            <Chip tone="primary">{budgetPercent}%</Chip>
+            <Chip tone="business">{budgetPercent}%</Chip>
           </div>
           <ProgressBar percent={budgetPercent} className="mt-5" />
           <p className="mt-3 text-[12px] text-on-surface-variant/70">
@@ -166,7 +166,7 @@ export default function BusinessDashboard() {
           action={
             <button
               type="button"
-              className="flex items-center gap-1 text-[13px] text-primary transition-opacity hover:opacity-80"
+              className="flex items-center gap-1 text-[13px] text-business transition-opacity hover:opacity-80"
             >
               {t.brand.viewAll}
               <Icon name="chevron_right" size={16} />
