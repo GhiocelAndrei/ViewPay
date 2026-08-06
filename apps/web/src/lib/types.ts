@@ -8,6 +8,38 @@ export interface Me {
   businessId?: string | null;
   companyName?: string | null;
   onboardingComplete: boolean;
+  creatorId?: string | null;
+  displayName?: string | null;
+}
+
+export interface ClipDto {
+  tikTokVideoId: string;
+  title?: string | null;
+  coverImageUrl?: string | null;
+  embedLink?: string | null;
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
+  shareCount: number;
+  tikTokCreateTime: string;
+}
+
+export interface AggregatesDto {
+  avgViews: number;
+  avgLikes: number;
+  avgComments: number;
+  avgShares: number;
+  engagementRate: number;
+}
+
+export interface CreatorProfileDto {
+  id: string;
+  displayName: string;
+  followerCount: number;
+  avatarUrl?: string | null;
+  niche?: string | null;
+  clips: ClipDto[];
+  aggregates: AggregatesDto;
 }
 
 export type CreatorCategory =

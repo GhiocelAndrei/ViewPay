@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Vira.Abstractions.Constants;
 using Vira.Abstractions.Models.Identity;
@@ -29,6 +30,10 @@ builder.Services.Configure<FirebaseSettings>(builder.Configuration.GetSection("F
 var connectionString = builder.Configuration.GetConnectionString("Postgres") ?? string.Empty;
 builder.Services.AddApplication(connectionString);
 
+// Persist the Data Protection key ring in Postgres so encrypted TikTok tokens survive restarts
+// (the Container Apps filesystem is ephemeral).
+builder.Services.AddDataProtection().PersistKeysToDbContext<ViraDbContext>();
+
 // Firebase Admin — verifies business ID tokens. No-ops when unconfigured (placeholder env).
 FirebaseInitializer.Initialize(builder.Configuration.GetSection("Firebase").Get<FirebaseSettings>() ?? new());
 
@@ -45,9 +50,14 @@ builder.Services.AddCors(o => o.AddPolicy("spa", p => p
 builder.Services.AddAuthentication(AuthConstants.SessionScheme)
     .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(AuthConstants.SessionScheme, null);
 builder.Services.AddAuthorization(o =>
+{
     o.AddPolicy(AuthConstants.BusinessPolicy, p => p
         .RequireAuthenticatedUser()
-        .RequireClaim(AuthConstants.Claims.AccountType, nameof(AccountType.Business))));
+        .RequireClaim(AuthConstants.Claims.AccountType, nameof(AccountType.Business)));
+    o.AddPolicy(AuthConstants.CreatorPolicy, p => p
+        .RequireAuthenticatedUser()
+        .RequireClaim(AuthConstants.Claims.AccountType, nameof(AccountType.Creator)));
+});
 
 var app = builder.Build();
 

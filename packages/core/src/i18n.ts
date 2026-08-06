@@ -332,6 +332,13 @@ export const ro = {
     preliminaryNote:
       "Portret construit pe clipurile analizate până acum. Se îmbogățește după fiecare campanie.",
     seeClip: "Vezi clipul",
+    pendingTitle: "Portretul tău AI",
+    pendingText:
+      "Ți-am conectat contul TikTok și ți-am adus clipurile. Portretul AI (arhetip, dimensiuni de stil, dovezi) se generează în pasul următor.",
+    yourClips: "Clipurile tale",
+    noClips: "Niciun clip găsit pe contul tău încă.",
+    views: "vizualizări",
+    loading: "Se încarcă profilul tău…",
   },
   earnings: {
     title: "Câștiguri",

@@ -114,5 +114,10 @@ class CreatorSummary(BaseModel):
     clip_count: int = Field(alias="clipCount")
 
 
+# Note: the video-analysis payload is posted to the backend as a raw JSON dict (pass-through) — the
+# backend stores it verbatim as JSONB. Its shape is defined by the analyzer's ontology/prompt, not a
+# model here; see BackendClient.post_clip_analysis.
+
+
 # TODO: PortraitClaim (evidence required), CreatorPortrait, the score contract
 #       {value?, confidence, factors[], evidence[]} enforced via messages.parse().
